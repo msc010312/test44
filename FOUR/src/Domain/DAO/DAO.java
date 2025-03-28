@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Domain.DTO.RentalDTO;
+
 public abstract class DAO {
 	protected PreparedStatement pstmt;
 	protected ResultSet rs;
-	protected Connection conn;
+	protected static Connection conn;
 	protected DAO(){
+		
 	}
 }
