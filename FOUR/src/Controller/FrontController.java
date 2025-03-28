@@ -23,6 +23,7 @@ public class FrontController {
 		// 인증요청 API(ENDPOINT : 서브컨트롤러 객체 저장);
 		map.put("/user", new UserController());
 		map.put("/book", new BookController());
+		map.put("/rental", new RentalController());
 	}
 	
 	// View로부터 전달받는 요청 처리
@@ -31,5 +32,5 @@ public class FrontController {
 		String endPoint = (String)params.get("endPoint");
 		SubController controller = map.get(endPoint);
 		return controller.execute(params);
-	};
+	}
 }

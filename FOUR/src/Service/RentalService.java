@@ -2,6 +2,8 @@ package Service;
 
 import Domain.DAO.RentalDAO;
 import Domain.DAO.RentalDAOInterface;
+import Domain.DTO.BookDTO;
+import Domain.DTO.RentalDTO;
 
 public class RentalService {
 	private RentalDAOInterface rentaldao;
@@ -17,5 +19,10 @@ public class RentalService {
 		if (instance == null)
 			instance = new RentalService();
 		return instance;
+	}
+
+	// Tx 처리 + 비지니스 유효성검사(정책)
+	public boolean registration(RentalDTO rentaldto) throws Exception {
+		return rentaldao.insert(rentaldto) > 0;
 	}
 }

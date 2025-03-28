@@ -16,7 +16,7 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 		conn = DriverManager.getConnection(url, id, pw);
 		System.out.println("DB CONNECTED...");
 	}
-	
+
 	private static RentalDAO instace;
 
 	public static RentalDAO getInstance() throws Exception {
@@ -44,5 +44,43 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 			} catch (Exception e2) {
 			}
 		}
+	}
+
+	@Override
+	public int select(RentalDTO rentalDto) throws Exception {
+		try {
+			pstmt = conn.prepareStatement("select * from rental_tbl where user_id = ?");
+			pstmt.setInt(1, rentalDto.getRental_id());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SQLException("RentalDAO : Select sql Exception");
+		} finally {
+			try {
+				pstmt.close();
+			} catch (Exception e2) {
+
+			}
+		}
+	}
+
+	@Override
+	public int Update(RentalDTO rentalDto) throws Exception {
+		try {
+
+		} catch (Exception e) {
+
+		}
+		return 1;
+	}
+
+	@Override
+	public int Delete(RentalDTO rentalDto) throws Exception {
+		try {
+
+		} catch (Exception e) {
+
+		}
+		return 1;
 	}
 }

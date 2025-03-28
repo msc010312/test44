@@ -92,12 +92,12 @@ public class UserController implements SubController {
 	}
 
 	private boolean isValid(UserDTO userDTO) {
-		if (userDTO.getUserid() == null || userDTO.getUserid().length() <= 4) {
+		if (userDTO.getUser_id() == null || userDTO.getUser_id().length() <= 4) {
 			response.put("error", "[INVALID] userid의 길이는 최소 5자 이상이어야 합니다");
 			System.out.println("[INVALID] userid의 길이는 최소 5자 이상이어야 합니다");
 			return false;
 		}
-		if (userDTO.getUserid().matches("^[0-9].*")) {
+		if (userDTO.getUser_id().matches("^[0-9].*")) {
 			response.put("error", "[INVALID] userid의 첫문자로 숫자가 들어올 수 없습니다.");
 			System.out.println("[INVALID] userid의 첫문자로 숫자가 들어올 수 없습니다.");
 			return false;
