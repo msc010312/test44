@@ -11,7 +11,7 @@ import Controller.FrontController;
 
 
 
-public class TUI {
+public class View {
 
 
 	private String userid; // UserId
@@ -21,7 +21,7 @@ public class TUI {
 
 	private FrontController controller;
 
-	TUI() throws Exception {
+	public View() throws Exception {
 		controller = FrontController.getInstance();
 	}
 
