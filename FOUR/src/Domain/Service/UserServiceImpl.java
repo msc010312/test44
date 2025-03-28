@@ -1,11 +1,11 @@
-package CH38.Domain.Service;
+package Domain.Service;
 
 import java.sql.SQLException;
 
-import CH38.Domain.DAO.UserDAOImpl;
-import CH38.Domain.DAO.UserDAOInterface;
-import CH38.Domain.DAO.ConnectionPool.ConnectionPool;
-import CH38.Domain.DTO.UserDTO;
+import Domain.DAO.UserDAOImpl;
+import Domain.DAO.UserDAOInterface;
+import Domain.DAO.ConnectionPool.ConnectionPool;
+import Domain.DTO.UserDTO;
 
 public class UserServiceImpl {
 

@@ -1,4 +1,4 @@
-package CH38.Domain.DTO;
+package Domain.DTO;
 
 public class BookDTO {
 	private String bookCode;

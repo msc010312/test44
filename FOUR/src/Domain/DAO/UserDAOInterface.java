@@ -1,9 +1,9 @@
-package CH38.Domain.DAO;
+package Domain.DAO;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import CH38.Domain.DTO.UserDTO;
+import Domain.DTO.UserDTO;
 
 public interface UserDAOInterface {
 

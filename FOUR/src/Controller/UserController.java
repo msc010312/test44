@@ -1,11 +1,11 @@
-package CH38.Controller;
+package Controller;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import CH38.Domain.DTO.UserDTO;
-import CH38.Domain.Service.UserServiceImpl;
+import Domain.DTO.UserDTO;
+import Domain.Service.UserServiceImpl;
 
 public class UserController implements SubController {
 

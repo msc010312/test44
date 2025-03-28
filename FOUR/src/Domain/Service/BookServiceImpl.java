@@ -1,8 +1,8 @@
-package CH38.Domain.Service;
+package Domain.Service;
 
-import CH38.Domain.DAO.BookDAOImpl;
-import CH38.Domain.DAO.BookDAOInterface;
-import CH38.Domain.DTO.BookDTO;
+import Domain.DAO.BookDAOImpl;
+import Domain.DAO.BookDAOInterface;
+import Domain.DTO.BookDTO;
 
 public class BookServiceImpl {
 
