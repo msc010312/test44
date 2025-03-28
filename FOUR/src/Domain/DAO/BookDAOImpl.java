@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import Domain.DAO.ConnectionPool.ConnectionItem;
-import Domain.DAO.ConnectionPool.ConnectionPool;
 import Domain.DTO.BookDTO;
 
 public class BookDAOImpl extends DAO implements BookDAOInterface {
@@ -31,15 +29,12 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 	@Override
 	public int insert(BookDTO BookDTO) throws Exception {
 		try {
-			connectionItem = connectionPool.getConnection();
-			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("insert into tbl_book values(?,?,?,?)");
 			pstmt.setString(1, BookDTO.getBookCode());
 			pstmt.setString(2, BookDTO.getBookName());
 			pstmt.setString(3, BookDTO.getPublisher());
 			pstmt.setString(4, BookDTO.getIsbn());
 			
-			connectionPool.releaseConnection(connectionItem);
 			
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
