@@ -16,6 +16,14 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 		conn = DriverManager.getConnection(url, id, pw);
 		System.out.println("DB CONNECTED...");
 	}
+	
+	private static RentalDAO instace;
+
+	public static RentalDAO getInstance() throws Exception {
+		if (instace == null)
+			instace = new RentalDAO();
+		return instace;
+	}
 
 	// CRUD
 	@Override
