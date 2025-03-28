@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Domain.DTO.UserDTO;
-import Service.UserServiceImpl;
+import Service.UserService;
 
 public class UserController implements SubController {
 
-	private UserServiceImpl userService;
+	private UserService userService;
 
 	Map<String, Object> response;
 
 	public UserController() {
 		try {
-			userService = UserServiceImpl.getInstance();
+			userService = UserService.getInstance();
 		} catch (Exception e) {
 			execeptionHandler(e);
 		}
@@ -38,11 +38,13 @@ public class UserController implements SubController {
 			// 01 파라미터 받기
 			case 1: { // C - 회원가입
 				System.out.println("[UC] 회원가입 요청 확인");
-				String userid = params.get("userid") != null ? (String) params.get("userid") : null;
-				String username = params.get("username") != null ? (String) params.get("username") : null;
-				String password = params.get("password") != null ? (String) params.get("password") : null;
-				String role = "ROLE_USER";
-				UserDTO userDTO = new UserDTO(userid, username, password, role);
+				String user_id = params.get("user_id") != null ? (String) params.get("user_id") : null;
+				String user_name = params.get("user_name") != null ? (String) params.get("user_name") : null;
+				String user_identity = params.get("user_identity") != null ? (String) params.get("user_identity") : null;
+				String user_phone = params.get("user_phone") != null ? (String) params.get("user_phone") : null;
+				String user_addr = params.get("user_addr") != null ? (String) params.get("user_addr") : null;
+				String user_grade = "ROLE_USER";
+				UserDTO userDTO = new UserDTO(user_id, user_name, user_identity, user_phone, user_addr, user_grade);
 				Boolean isOk = isValid(userDTO);
 				System.out.println("[No-1 회원가입] 유효성 검증 확인 : " + isOk);
 				if (!isOk) {

@@ -2,24 +2,24 @@ package Service;
 
 import java.sql.SQLException;
 
-import Domain.DAO.UserDAOImpl;
+import Domain.DAO.UserDAO;
 import Domain.DAO.UserDAOInterface;
 import Domain.DTO.UserDTO;
 
-public class UserServiceImpl {
+public class UserService {
 
 	private UserDAOInterface userDAO;
 
-	private static UserServiceImpl instance;
+	private static UserService instance;
 
-	private UserServiceImpl() throws Exception {
-		userDAO = UserDAOImpl.getInstance();
+	private UserService() throws Exception {
+		userDAO = UserDAO.getInstance();
 		System.out.println("[SERVICE] UserServiceImpl init");
 	}
 
-	public static UserServiceImpl getInstance() throws Exception {
+	public static UserService getInstance() throws Exception {
 		if (instance == null) {
-			instance = new UserServiceImpl();
+			instance = new UserService();
 		}
 		return instance;
 	}
