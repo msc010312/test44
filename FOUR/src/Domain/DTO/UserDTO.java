@@ -1,4 +1,4 @@
-package CH38.Domain.DTO;
+package Domain.DTO;
 
 //저장단위(Controller -> Service <->DAO<->DB)
 public class UserDTO {

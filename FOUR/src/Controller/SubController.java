@@ -1,4 +1,4 @@
-package CH38.Controller;
+package Controller;
 
 import java.util.Map;
 

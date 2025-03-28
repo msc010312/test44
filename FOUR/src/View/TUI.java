@@ -1,11 +1,11 @@
-package CH38.View;
+package View;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import CH38.Controller.FrontController;
+import Controller.FrontController;
 
 
 

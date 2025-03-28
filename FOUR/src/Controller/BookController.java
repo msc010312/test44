@@ -1,10 +1,11 @@
-package CH38.Controller;
+package Controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import CH38.Domain.DTO.BookDTO;
-import CH38.Domain.Service.BookServiceImpl;
+import Domain.DTO.BookDTO;
+import Domain.Service.BookServiceImpl;
+
 
 public class BookController implements SubController {
 

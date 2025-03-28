@@ -1,4 +1,4 @@
-package CH38.Domain.DAO.ConnectionPool;
+package Domain.DAO.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
