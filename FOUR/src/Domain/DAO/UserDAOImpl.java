@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import Domain.DAO.ConnectionPool.ConnectionItem;
-import Domain.DAO.ConnectionPool.ConnectionPool;
 import Domain.DTO.UserDTO;
 
 public class UserDAOImpl extends DAO implements UserDAOInterface {
@@ -29,8 +27,6 @@ public class UserDAOImpl extends DAO implements UserDAOInterface {
 	@Override
 	public int insert(UserDTO userDTO) throws Exception {
 		try {
-			connectionItem = connectionPool.getConnection();
-			Connection conn = connectionItem.getConn();
 			
 			pstmt = conn.prepareStatement("insert into tbl_user values(?,?,?,?)");
 			pstmt.setString(1, userDTO.getUserid());
@@ -38,7 +34,6 @@ public class UserDAOImpl extends DAO implements UserDAOInterface {
 			pstmt.setString(3, userDTO.getPassword());
 			pstmt.setString(4, "ROLE_USER");
 			
-			connectionPool.releaseConnection(connectionItem);
 			
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {

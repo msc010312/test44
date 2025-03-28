@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Domain.DTO.UserDTO;
-import Domain.Service.UserServiceImpl;
+import Service.UserServiceImpl;
 
 public class UserController implements SubController {
 

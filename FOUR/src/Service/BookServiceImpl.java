@@ -1,4 +1,4 @@
-package Domain.Service;
+package Service;
 
 import Domain.DAO.BookDAOImpl;
 import Domain.DAO.BookDAOInterface;
