@@ -9,9 +9,7 @@ public interface RentalDAOInterface {
 	
 	int select(RentalDTO rentalDto) throws Exception;
 	
-	int Update(RentalDTO rentalDto) throws Exception;
-	
-	int Delete(RentalDTO rentalDto) throws Exception;
+	int delete(RentalDTO rentalDto) throws Exception;
 	
 
 }

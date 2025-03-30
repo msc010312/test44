@@ -1,28 +1,19 @@
 package Domain.DAO;
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import Domain.DTO.RentalDTO;
 
 public class RentalDAO extends DAO implements RentalDAOInterface {
-	// 데이터베이스 접속 정보 선언
-	private static String id = "system"; // 데이터베이스 로그인 아이디
-	private static String pw = "1234"; // 데이터베이스 로그인 비밀번호
-	private static String url = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle 데이터베이스 URL
-
-	// 데이터베이스 연결 메서드
-	public static void DAO() throws Exception {
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		conn = DriverManager.getConnection(url, id, pw);
-		System.out.println("DB CONNECTED...");
+	public RentalDAO() throws Exception {
+		super();
 	}
 
-	private static RentalDAO instace;
+	private static RentalDAO instance;
 
 	public static RentalDAO getInstance() throws Exception {
-		if (instace == null)
-			instace = new RentalDAO();
-		return instace;
+		if (instance == null)
+			instance = new RentalDAO();
+		return instance;
 	}
 
 	// CRUD
@@ -41,7 +32,7 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 		} finally {
 			try {
 				pstmt.close();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -49,38 +40,42 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	@Override
 	public int select(RentalDTO rentalDto) throws Exception {
 		try {
-			pstmt = conn.prepareStatement("select * from rental_tbl where user_id = ?");
+			String sql = "SELECT * FROM rental_tbl WHERE user_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rentalDto.getUser_id());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+	            return rs.getInt("rental_id"); // rental_id 값만 반환
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SQLException("RentalDAO : SELECT SQL EXCEPTION");
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (Exception e) {
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public int delete(RentalDTO rentalDto) throws Exception {
+		try {
+			String sql = "DELETE FROM rental_tbl WHERE rental_id = ?";
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rentalDto.getRental_id());
+
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new SQLException("RentalDAO : Select sql Exception");
+			throw new SQLException("RentalDAO : DELETE SQL EXCEPTION");
 		} finally {
 			try {
 				pstmt.close();
-			} catch (Exception e2) {
-
+			} catch (Exception e) {
 			}
 		}
-	}
-
-	@Override
-	public int Update(RentalDTO rentalDto) throws Exception {
-		try {
-
-		} catch (Exception e) {
-
-		}
-		return 1;
-	}
-
-	@Override
-	public int Delete(RentalDTO rentalDto) throws Exception {
-		try {
-
-		} catch (Exception e) {
-
-		}
-		return 1;
 	}
 }

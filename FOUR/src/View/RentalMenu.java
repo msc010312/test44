@@ -6,12 +6,13 @@ import java.util.Scanner;
 
 import Controller.FrontController;
 
-public class RentalMenu{
-	
+public class RentalMenu {
+
 	private Scanner sc = new Scanner(System.in);
-	
+
 	private FrontController controller = FrontController.getInstance();
-	Map<String,Object> res = new HashMap();
+	Map<String, Object> res = new HashMap();
+
 	public RentalMenu() {
 		Boolean prev = true;
 		while (prev) {
@@ -43,40 +44,69 @@ public class RentalMenu{
 			}
 		}
 	}
+
 	public void insertRT() {
 		System.out.println("--------------------------");
-		System.out.println("회원정보 입력");
+		System.out.println("대여정보 입력");
 		System.out.println("--------------------------");
-		System.out.print("ID : ");
+		System.out.print("Rental ID : ");
 		String id = sc.next();
-		System.out.println("USERNAME : ");
+		System.out.println("Book Code : ");
 		String bk = sc.next();
-		System.out.print("PW : ");
+		System.out.print("User ID : ");
 		String ui = sc.next();
-		
-		//요청처리
-		Map<String,Object> params = new HashMap();
+
+		// 요청처리
+		Map<String, Object> params = new HashMap();
 		params.put("endPoint", "/rental");
 		params.put("serviceNum", 1);
 		params.put("rental_id", id);
 		params.put("book_code", bk);
 		params.put("user_id", ui);
-		
+
 		res = controller.execute(params);
-		for(String key : res.keySet()) {
+		for (String key : res.keySet()) {
 			System.out.println(key + " : " + res.get(key));
 		}
 	}
-	
+
 	public void selectRT() {
-		
+		System.out.println("--------------------------");
+		System.out.println("대여 정보 조회");
+		System.out.println("--------------------------");
+		System.out.print("User ID: ");
+		String ui = sc.next();
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("endPoint", "/rental");
+		params.put("serviceNum", 2);
+		params.put("user_id", ui);
+
+		res = controller.execute(params);
+		for (String key : res.keySet()) {
+			System.out.println(key + " : " + res.get(key));
+		}
 	}
-	
+
 	public void updateRT() {
-		
+
 	}
-	
+
 	public void deleteRT() {
-		
+		System.out.println("--------------------------");
+        System.out.println("대여 정보 삭제");
+        System.out.println("--------------------------");
+        System.out.print("Rental ID: ");
+        String id = sc.next();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("endPoint", "/rental");
+        params.put("serviceNum", 4);
+        params.put("rental_id", id);
+
+        res = controller.execute(params);
+        for (String key : res.keySet()) {
+			System.out.println(key + " : " + res.get(key));
+		}
 	}
 }
