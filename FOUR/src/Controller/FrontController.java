@@ -21,8 +21,8 @@ public class FrontController {
 	//초기화
 	private void init() {
 		// 인증요청 API(ENDPOINT : 서브컨트롤러 객체 저장);
-		map.put("/user", new UserController());
-		map.put("/book", new BookController());
+//		map.put("/user", new UserController());
+//		map.put("/book", new BookController());
 		map.put("/rental", new RentalController());
 	}
 	

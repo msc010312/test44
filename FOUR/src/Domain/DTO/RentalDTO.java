@@ -5,7 +5,7 @@ public class RentalDTO {
 	private int book_code;
 	private int user_id;
 	
-	RentalDTO(){};
+	public RentalDTO(){};
 	public RentalDTO(int rental_id, int book_code, int user_id) {
 		super();
 		this.rental_id = rental_id;

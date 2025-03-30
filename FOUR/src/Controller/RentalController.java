@@ -6,8 +6,7 @@ import java.util.Map;
 import Domain.DTO.RentalDTO;
 import Service.RentalService;
 
-
-public class RentalController implements SubController{
+public class RentalController implements SubController {
 
 	private RentalService rs;
 
@@ -21,6 +20,7 @@ public class RentalController implements SubController{
 		}
 	}
 
+	@SuppressWarnings("finally")
 	@Override
 	public Map<String, Object> execute(Map<String, Object> params) {
 		response = new HashMap();
@@ -37,8 +37,8 @@ public class RentalController implements SubController{
 				int rental_id = params.get("rental_id") != null ? (int) params.get("rental_id") : null;
 				int book_code = params.get("book_code") != null ? (int) params.get("book_code") : null;
 				int user_id = params.get("user_id") != null ? (int) params.get("user_id") : null;
-				RentalDTO rentaldto = new RentalDTO(rental_id, book_code, user_id);
-				Boolean isOk = isValid(rentaldto);
+				RentalDTO inDto = new RentalDTO(rental_id, book_code, user_id);
+				Boolean isOk = isValid(inDto);
 				System.out.println("대여 신청 유효성 검증 확인 : " + isOk);
 				if (!isOk) {
 					response.put("status", false);
@@ -46,19 +46,19 @@ public class RentalController implements SubController{
 				}
 				break;
 			case 2: // 대여 조회
-				if (params.get("rental_id") != null) {
-					System.out.println("대여 조회 요청");
-					int rental_id2 = params.get("rental_id") != null?(int)params.get("rental_id") : null;
-				} else {
-					int rental_id2 = params.get("rental_id") != null?(int)params.get("rental_id") : null;
-					System.out.println("대여 조회 전체 조회 요청");
-				}
+				System.out.println("대여 조회 요청");
+				int rental_id2 = params.get("rental_id") != null ? (int) params.get("rental_id") : null;
+				RentalDTO selDto = new RentalDTO();
+				selDto.setRental_id(rental_id2);
 				break;
 			case 3: // 대여 정보 수정
 				System.out.println("대여 정보 수정 요청");
 				break;
 			case 4: // 대여 신청 삭제
 				System.out.println("대여 신청 삭제 요청");
+				int rental_id_to_delete = params.get("rental_id") != null ? (int) params.get("rental_id") : 0;
+				RentalDTO deleteDto = new RentalDTO();
+				deleteDto.setRental_id(rental_id_to_delete);
 				break;
 			default:
 				System.err.println("[BC] 잘못된 요청 번호");
