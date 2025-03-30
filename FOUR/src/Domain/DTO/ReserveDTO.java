@@ -2,15 +2,15 @@ package Domain.DTO;
 
 public class ReserveDTO {
 	private int rental_id;
-	private int member_id;
+	private int user_id;
 	private String reserve_order;
 	
 	public ReserveDTO() {}
 
-	public ReserveDTO(int rental_id, int member_id, String reserve_order) {
+	public ReserveDTO(int rental_id, int user_id, String reserve_order) {
 		super();
 		this.rental_id = rental_id;
-		this.member_id = member_id;
+		this.user_id = user_id;
 		this.reserve_order = reserve_order;
 	}
 
@@ -22,12 +22,12 @@ public class ReserveDTO {
 		this.rental_id = rental_id;
 	}
 
-	public int getMember_id() {
-		return member_id;
+	public int getUser_id() {
+		return user_id;
 	}
 
-	public void setMember_id(int member_id) {
-		this.member_id = member_id;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getReserve_order() {
@@ -40,7 +40,7 @@ public class ReserveDTO {
 
 	@Override
 	public String toString() {
-		return "ReserveDTO [rental_id=" + rental_id + ", member_id=" + member_id + ", reserve_order=" + reserve_order
+		return "ReserveDTO [rental_id=" + rental_id + ", user_id=" + user_id + ", reserve_order=" + reserve_order
 				+ "]";
 	}	
 }
