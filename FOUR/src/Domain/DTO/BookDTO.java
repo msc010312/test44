@@ -1,36 +1,45 @@
 package Domain.DTO;
 
 public class BookDTO {
-	private String bookCode;
-	private String bookName;
+	private String book_Code;
+	private String book_Auther;
+	private String book_Name;
 	private String publisher;
-	private String isbn;
+	private String isreserve;
 
 	public BookDTO() {
 	};
 
-	public BookDTO(String bookCode, String bookName, String publisher, String isbn) {
+	public BookDTO(String bookCode, String bookAuther, String bookName, String publisher, String isreserve) {
 		super();
-		this.bookCode = bookCode;
-		this.bookName = bookName;
+		this.book_Code = bookCode;
+		this.book_Auther = bookAuther;
+		this.book_Name = bookName;
 		this.publisher = publisher;
-		this.isbn = isbn;
+		this.isreserve = isreserve;
 	}
 
 	public String getBookCode() {
-		return bookCode;
+		return book_Code;
 	}
 
 	public void setBookCode(String bookCode) {
-		this.bookCode = bookCode;
+		this.book_Code = bookCode;
+	}
+	public String getBookAuther() {
+		return book_Auther;
+	}
+	
+	public void setBookAuther(String bookAuther) {
+		this.book_Auther = bookAuther;
 	}
 
 	public String getBookName() {
-		return bookName;
+		return book_Name;
 	}
 
 	public void setBookName(String bookName) {
-		this.bookName = bookName;
+		this.book_Name = bookName;
 	}
 
 	public String getPublisher() {
@@ -41,18 +50,18 @@ public class BookDTO {
 		this.publisher = publisher;
 	}
 
-	public String getIsbn() {
-		return isbn;
+	public String getIsreserve() {
+		return isreserve;
 	}
 
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
+	public void setIsbn(String isreserve) {
+		this.isreserve = isreserve;
 	}
 
 	@Override
 	public String toString() {
-		return "BookDTO [bookCode=" + bookCode + ", bookName=" + bookName + ", publisher=" + publisher + ", isbn="
-				+ isbn + "]";
+		return "BookDTO [bookCode=" + book_Code + ", bookAuther" + book_Auther + ", bookName=" + book_Name + ", publisher=" + publisher + ", isreserve="
+				+ isreserve + "]";
 	}
 
 }
