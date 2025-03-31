@@ -25,6 +25,7 @@ public class ConnectionPool {
 			System.out.println("Driver loading Success");
 			for (int i = 0; i < size; i++) {
 				conn = DriverManager.getConnection(url, id, pw);
+				conn.setAutoCommit(true);
 				connectionPool.add(new ConnectionItem(conn));
 				System.out.println("DB CONNECTED");
 			}

@@ -1,11 +1,9 @@
 package Domain.DAO;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Domain.DAO.ConnectionPool.ConnectionPool;
 import Domain.DTO.ReserveDTO;
 
 public class ReserveDAOImpl extends DAO implements ReserveDAO {
@@ -15,7 +13,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 
 	private ReserveDAOImpl() {
 		System.out.println("[DAO] ReserveDAOImpl init...");
-		connectionPool = ConnectionPool.getInstance();
 	}
 
 	public static ReserveDAOImpl getInstance() {
@@ -31,8 +28,8 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 	public int insertReserve(ReserveDTO reserveDTO) throws Exception {
 		int result = 0;
 		try {
-			connectionItem = connectionPool.getInstance().getConnection();
-			Connection conn = connectionItem.getConn();
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
 
 			pstmt = conn
 					.prepareStatement("INSERT INTO reserve_tbl (rental_id, user_id, reserve_order) VALUES (?, ?, ?)");
@@ -53,16 +50,16 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		}
 	}
 
-	// 도서에 대한 대여 및 예약 조회
+	// 대여 아이디로 도서 예약 조회
 	@Override
-	public List<ReserveDTO> selectReserveByBookCode(int rental_id) {
+	public List<ReserveDTO> selectReserveByRentalId(int rental_id) {
 		List<ReserveDTO> reserveList = new ArrayList();
 		connectionItem = null;
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = ConnectionPool.getInstance().getConnection();
-			Connection conn = connectionItem.getConn();
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl WHERE rental_id = ?");
 			pstmt.setInt(1, rental_id);
@@ -78,7 +75,7 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("ReserveDAO's SELECT BY BOOKCODE SQL EXCEPTION");
+			System.err.println("ReserveDAO's SELECT BY RENTALID SQL EXCEPTION");
 		} finally {
 			try {
 				if (rs != null)
@@ -101,8 +98,8 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = ConnectionPool.getInstance().getConnection();
-			Connection conn = connectionItem.getConn();
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl WHERE user_id = ?");
 			pstmt.setInt(1, user_id);
@@ -141,8 +138,8 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = ConnectionPool.getInstance().getConnection();
-			Connection conn = connectionItem.getConn();
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl");
 
@@ -178,11 +175,10 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		connectionItem = null;
 		pstmt = null;
 		try {
-			connectionItem = connectionPool.getInstance().getConnection();
-			Connection conn = connectionItem.getConn();
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
 
-			pstmt = conn
-					.prepareStatement("UPDATE reserve_tbl set reserve_order=? WHERE rental_id=? AND user_id=?;");
+			pstmt = conn.prepareStatement("UPDATE reserve_tbl set reserve_order=? WHERE rental_id=? AND user_id=?;");
 			pstmt.setString(1, reserveDTO.getReserve_order());
 			pstmt.setInt(2, reserveDTO.getRental_id());
 			pstmt.setInt(3, reserveDTO.getUser_id());
@@ -200,9 +196,30 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		}
 	}
 
+	// 예약 삭제
 	@Override
-	public int deleteReserve(int reserve_id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteReserve(int user_id, int rental_id) throws SQLException {
+		int result = 0;
+		try {
+			connectionItem = connectionPool.getConnection();
+			conn = connectionItem.getConn();
+
+			pstmt = conn.prepareStatement("DELETE FROM reserve_tbl WHERE user_id=? AND rental_id=?");
+			pstmt.setInt(1, user_id);
+			pstmt.setInt(2, rental_id);
+
+			result = pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("ReserveDAO's DELETE SQL EXCEPTION");
+		} finally {
+			try {
+				connectionPool.releaseConnection(connectionItem); // 자원제거
+				pstmt.close();
+			} catch (Exception e2) {
+			}
+		}
+		return result;
 	}
 }

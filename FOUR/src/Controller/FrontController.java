@@ -23,6 +23,7 @@ public class FrontController {
 		// 인증요청 API(ENDPOINT : 서브컨트롤러 객체 저장);
 		map.put("/user", new UserController());
 		map.put("/book", new BookController());
+		map.put("/reserve", new ReserveController());
 	}
 	
 	// View로부터 전달받는 요청 처리
