@@ -21,9 +21,8 @@ public class RentalMenu {
 			System.out.println("--------------------------");
 			System.out.println("1 Insert(C)");
 			System.out.println("2 Select(R)");
-			System.out.println("3 Update(U)");
-			System.out.println("4 Delete(D)");
-			System.out.println("5 종료");
+			System.out.println("3 Delete(D)");
+			System.out.println("4 종료");
 			System.out.print("번호 : ");
 			int num = sc.nextInt();
 			switch (num) {
@@ -34,12 +33,9 @@ public class RentalMenu {
 				selectRT();
 				break;
 			case 3:
-				updateRT();
-				break;
-			case 4:
 				deleteRT();
 				break;
-			case 5:
+			case 4:
 				prev = !prev;
 			}
 		}

@@ -57,6 +57,7 @@ public class RentalController implements SubController {
 				List<RentalDTO> res = rs.viewRentalInfo(selDto);
 				if (res == null || res.size() == 0) {
 					response.put("status", false);
+					System.out.println("유저가 없습니다");
 				} else {
 					response.put("data", res);
 				}
@@ -66,9 +67,9 @@ public class RentalController implements SubController {
 				break;
 			case 4: // 대여 신청 삭제
 				System.out.println("대여 신청 삭제 요청");
-				int rental_id_to_delete = params.get("rental_id") != null ? (int) params.get("rental_id") : 0;
-				RentalDTO deleteDto = new RentalDTO();
-				deleteDto.setRental_id(rental_id_to_delete);
+				int rentalid = params.get("rental_id") != null ? (int) params.get("rental_id") : null;
+				RentalDTO deleteDto = new RentalDTO(rentalid,0,0);
+				rs.deleteRentalList(deleteDto);
 				break;
 			default:
 				System.err.println("[BC] 잘못된 요청 번호");
@@ -92,6 +93,7 @@ public class RentalController implements SubController {
 
 	// 예외처리함수
 	public Map<String, Object> execeptionHandler(Exception e) {
+		e.printStackTrace();
 		if (response == null)
 			response = new HashMap();
 		response.put("status", false);

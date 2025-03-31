@@ -30,4 +30,7 @@ public class RentalService {
 	public List<RentalDTO> viewRentalInfo(RentalDTO rentaldto) throws Exception {
 		return rentaldao.select(rentaldto);
 	}
+	public boolean deleteRentalList(RentalDTO rentaldto) throws Exception {
+		return rentaldao.delete(rentaldto) > 0;
+	}
 }
