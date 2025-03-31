@@ -4,7 +4,6 @@ import java.util.List;
 
 import Domain.DAO.RentalDAO;
 import Domain.DAO.RentalDAOInterface;
-import Domain.DTO.BookDTO;
 import Domain.DTO.RentalDTO;
 
 public class RentalService {
