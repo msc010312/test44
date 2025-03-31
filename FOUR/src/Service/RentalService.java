@@ -4,7 +4,6 @@ import java.util.List;
 
 import Domain.DAO.RentalDAO;
 import Domain.DAO.RentalDAOInterface;
-import Domain.DTO.BookDTO;
 import Domain.DTO.RentalDTO;
 
 public class RentalService {
@@ -29,5 +28,8 @@ public class RentalService {
 	}
 	public List<RentalDTO> viewRentalInfo(RentalDTO rentaldto) throws Exception {
 		return rentaldao.select(rentaldto);
+	}
+	public boolean deleteRentalList(RentalDTO rentaldto) throws Exception {
+		return rentaldao.delete(rentaldto) > 0;
 	}
 }

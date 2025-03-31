@@ -21,27 +21,35 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 
 	// CRUD
 	@Override
-	public int insert(RentalDTO rentalDto) {
+	public int insert(RentalDTO rentalDto) throws Exception {
 		try {
-			pstmt = conn.prepareStatement("insert into rental_tbl(rental_id,book_code,user_id) values(?,?,?)");
+			conn.setAutoCommit(true);
+			pstmt = conn.prepareStatement("select book_code from rental_tbl where book_code = ? ");
+			pstmt.setInt(1, rentalDto.getBook_code());
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return -1; 
+			}
+			pstmt.close();
+			pstmt = conn.prepareStatement("insert into rental_tbl(RENTAL_ID,BOOK_CODE,USER_ID) values(?,?,?)");
 			pstmt.setInt(1, rentalDto.getRental_id());
 			pstmt.setInt(2, rentalDto.getBook_code());
 			pstmt.setInt(3, rentalDto.getUser_id());
-			System.out.println("1");
-			int rowsAffected = pstmt.executeUpdate();
-	        System.out.println("rowsAffected: " + rowsAffected);  // 실행된 행 수 확인
-			System.out.println("2");
-			return rowsAffected;
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = conn.prepareStatement("update book_tbl set isreserve = 1 where book_code = ?");
+			pstmt.setInt(1, rentalDto.getBook_code());
+			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-//			throw new SQLException("RentalDAO : INSERT SQL EXCEPTION");
+			throw new SQLException("RentalDAO : INSERT SQL EXCEPTION");
 		} finally {
 			try {
 				pstmt.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		return 0;
 	}
 
 	@Override
@@ -53,10 +61,8 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 			pstmt.setInt(1, rentalDto.getUser_id());
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				System.out.println(rs.getInt("user_id"));
 				RentalDTO rd = new RentalDTO(rs.getInt("rental_id"), rs.getInt("book_code"), rs.getInt("user_id"));
 				list.add(rd);
-
 			}
 			return list;
 		} catch (Exception e) {
@@ -74,10 +80,19 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	@Override
 	public int delete(RentalDTO rentalDto) throws Exception {
 		try {
+			pstmt = conn.prepareStatement("select book_code from rental_tbl where rental_id = ? ");
+			pstmt.setInt(1, rentalDto.getRental_id());
+			rs = pstmt.executeQuery();
+			rs.next();
+			int bc = rs.getInt("book_code");
+			pstmt.close();
 			String sql = "DELETE FROM rental_tbl WHERE rental_id = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rentalDto.getRental_id());
-
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = conn.prepareStatement("update book_tbl set isreserve = 0 where book_code = ?");
+			pstmt.setInt(1, bc);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
