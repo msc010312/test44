@@ -1,5 +1,6 @@
 package Domain.DAO;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +8,6 @@ import java.util.List;
 import Domain.DTO.RentalDTO;
 
 public class RentalDAO extends DAO implements RentalDAOInterface {
-	public RentalDAO() throws Exception {
-		super();
-	}
-
 	private static RentalDAO instance;
 
 	public static RentalDAO getInstance() throws Exception {
@@ -24,6 +21,8 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	public int insert(RentalDTO rentalDto) throws Exception {
 		try {
 			conn.setAutoCommit(true);
+			connectionItem = connectionPool.getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("select book_code from rental_tbl where book_code = ? ");
 			pstmt.setInt(1, rentalDto.getBook_code());
 			rs = pstmt.executeQuery();
@@ -39,6 +38,7 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 			pstmt.close();
 			pstmt = conn.prepareStatement("update book_tbl set isreserve = 1 where book_code = ?");
 			pstmt.setInt(1, rentalDto.getBook_code());
+			connectionPool.releaseConnection(connectionItem);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,15 +55,17 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	@Override
 	public List<RentalDTO> select(RentalDTO rentalDto) throws Exception {
 		try {
-			List<RentalDTO> list = new ArrayList();
-			String sql = "SELECT * FROM rental_tbl WHERE user_id = ?";
-			pstmt = conn.prepareStatement(sql);
+			connectionItem = connectionPool.getConnection();
+			Connection conn = connectionItem.getConn();
+			List<RentalDTO> list = new ArrayList<>();
+			pstmt = conn.prepareStatement("SELECT * FROM rental_tbl WHERE user_id = ?");
 			pstmt.setInt(1, rentalDto.getUser_id());
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				RentalDTO rd = new RentalDTO(rs.getInt("rental_id"), rs.getInt("book_code"), rs.getInt("user_id"));
 				list.add(rd);
 			}
+			connectionPool.releaseConnection(connectionItem);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,19 +82,21 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	@Override
 	public int delete(RentalDTO rentalDto) throws Exception {
 		try {
+			connectionItem = connectionPool.getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("select book_code from rental_tbl where rental_id = ? ");
 			pstmt.setInt(1, rentalDto.getRental_id());
 			rs = pstmt.executeQuery();
 			rs.next();
 			int bc = rs.getInt("book_code");
 			pstmt.close();
-			String sql = "DELETE FROM rental_tbl WHERE rental_id = ?";
-			pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement("DELETE FROM rental_tbl WHERE rental_id = ?");
 			pstmt.setInt(1, rentalDto.getRental_id());
 			pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = conn.prepareStatement("update book_tbl set isreserve = 0 where book_code = ?");
 			pstmt.setInt(1, bc);
+			connectionPool.releaseConnection(connectionItem);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -52,14 +52,14 @@ public class RentalController implements SubController {
 				break;
 			case 2: // 대여 조회
 				System.out.println("대여 조회 요청");
-				int userid = params.get("user_id") != null ? (int) params.get("user_id") : null;
+				int userid = params.get("user_id") != null ? (int) params.get("user_id") : 0;
 				RentalDTO selDto = new RentalDTO(0, 0, userid);
 				List<RentalDTO> res = rs.viewRentalInfo(selDto);
 				if (res == null || res.size() == 0) {
 					response.put("status", false);
 					System.out.println("유저가 없습니다");
 				} else {
-					response.put("data", res);
+					response.put("User", res);
 				}
 				return response;
 			case 3: // 대여 정보 수정
