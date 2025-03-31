@@ -1,21 +1,30 @@
 package Domain.DAO;
 
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import Domain.DTO.ReserveDTO;
 
-public class ReserveDAOImpl extends DAO implements ReserveDAO {
+public class ReserveDAOImpl extends DAO implements ReserveDAOInterface {
+
+	// 데이터베이스 연결 정보 (ConnectionPool에서 가져오던 정보)
+	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	private String id = "system";
+	private String pw = "1234";
 
 	// 싱글톤 패턴처리
-	private static ReserveDAOImpl instance;
+	private static ReserveDAOInterface instance;
 
-	private ReserveDAOImpl() {
+	private ReserveDAOImpl() throws Exception {
 		System.out.println("[DAO] ReserveDAOImpl init...");
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		conn = DriverManager.getConnection(url, id, pw);
+		System.out.println("[DAO] ReserveDAOImpl DB Success");
 	}
 
-	public static ReserveDAOImpl getInstance() {
+	public static ReserveDAOInterface getInstance() throws Exception {
 		if (instance == null) {
 			instance = new ReserveDAOImpl();
 		}
@@ -28,9 +37,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 	public int insertReserve(ReserveDTO reserveDTO) throws Exception {
 		int result = 0;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
-
 			pstmt = conn
 					.prepareStatement("INSERT INTO reserve_tbl (rental_id, user_id, reserve_order) VALUES (?, ?, ?)");
 			pstmt.setInt(1, reserveDTO.getRental_id());
@@ -42,8 +48,7 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 			e.printStackTrace();
 			throw new SQLException("ReserveDAO's INSERT SQL EXCEPTION");
 		} finally {
-			try {
-				connectionPool.releaseConnection(connectionItem); // 자원제거
+			try {				
 				pstmt.close();
 			} catch (Exception e2) {
 			}
@@ -58,9 +63,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
-
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl WHERE rental_id = ?");
 			pstmt.setInt(1, rental_id);
 
@@ -98,8 +100,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl WHERE user_id = ?");
 			pstmt.setInt(1, user_id);
@@ -138,8 +138,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		pstmt = null;
 		rs = null;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("SELECT * FROM reserve_tbl");
 
@@ -175,10 +173,8 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 		connectionItem = null;
 		pstmt = null;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
 
-			pstmt = conn.prepareStatement("UPDATE reserve_tbl set reserve_order=? WHERE rental_id=? AND user_id=?;");
+			pstmt = conn.prepareStatement("UPDATE reserve_tbl set reserve_order=? WHERE rental_id=? AND user_id=?");
 			pstmt.setString(1, reserveDTO.getReserve_order());
 			pstmt.setInt(2, reserveDTO.getRental_id());
 			pstmt.setInt(3, reserveDTO.getUser_id());
@@ -201,8 +197,6 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 	public int deleteReserve(int user_id, int rental_id) throws SQLException {
 		int result = 0;
 		try {
-			connectionItem = connectionPool.getConnection();
-			conn = connectionItem.getConn();
 
 			pstmt = conn.prepareStatement("DELETE FROM reserve_tbl WHERE user_id=? AND rental_id=?");
 			pstmt.setInt(1, user_id);

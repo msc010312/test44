@@ -10,12 +10,13 @@ public class ReserveMenu {
 
 	private Scanner sc = new Scanner(System.in);
 	private FrontController controller = FrontController.getInstance();
-	private Map<String, Object> params = new HashMap<String, Object>();
-	private Map<String, Object> response = new HashMap<String, Object>();
+	private Map<String, Object> params = new HashMap();
+	private Map<String, Object> response = new HashMap();
 
 	public ReserveMenu() {
 
 		params.put("endPoint", "/reserve");
+
 		Boolean prev = true;
 		while (prev) {
 			System.out.println("--------------------------");
@@ -32,6 +33,13 @@ public class ReserveMenu {
 			switch (num) {
 			// 예약 신청
 			case 1: {
+				System.out.println("Rental_Id : ");
+				params.put("rental_id", sc.nextInt());
+				System.out.println("User_Id : ");
+				params.put("user_id", sc.nextInt());
+				System.out.println("order ? : ");
+				params.put("reserve_order", sc.next());
+				response = controller.execute(params);
 				break;
 			}
 
@@ -47,7 +55,6 @@ public class ReserveMenu {
 				case 1: {
 					System.out.print("User_Id : ");
 					params.put("user_id", sc.nextInt());
-
 					break;
 				}
 
@@ -57,17 +64,35 @@ public class ReserveMenu {
 					params.put("rental_id", sc.nextInt());
 					break;
 				}
+				// 전체 예약 조회
+				case 3: {
+					break;
+				}
 				}
 				response = controller.execute(params);
+				break;
 			}
 
 			// 예약 수정
 			case 3: {
+
+				System.out.print("Rental_Id : ");
+				params.put("rental_id", sc.nextInt());
+				System.out.print("User_Id : ");
+				params.put("user_id", sc.nextInt());
+				System.out.print("Order : ");
+				params.put("reserve_order", sc.next());
+				response = controller.execute(params);
 				break;
 			}
 
 			// 예약 삭제
 			case 4: {
+				System.out.print("User_Id : ");
+				params.put("user_id", sc.nextInt());
+				System.out.print("Rental_Id : ");
+				params.put("rental_id", sc.nextInt());
+				response = controller.execute(params);
 				break;
 			}
 			// 종료

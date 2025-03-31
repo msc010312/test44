@@ -2,13 +2,13 @@ package Service;
 
 import java.util.List;
 
-import Domain.DAO.ReserveDAO;
+import Domain.DAO.ReserveDAOInterface;
 import Domain.DAO.ReserveDAOImpl;
 import Domain.DTO.ReserveDTO;
 
 public class ReserveService {
 
-	private ReserveDAO reserveDAO; // 인터페이스 파일
+	private ReserveDAOInterface reserveDAO; // 인터페이스 파일
 
 	// 싱글톤 패턴
 	private static ReserveService instance;
@@ -76,6 +76,7 @@ public class ReserveService {
 			EditReserve = reserveDAO.updateReserve(reserveDTO) > 0;
 			System.out.println("[RS] 예약 수정 성공");
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return EditReserve;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import Domain.DTO.ReserveDTO;
 
-public interface ReserveDAO {
+public interface ReserveDAOInterface {
 
 	// 예약 추가(C)
 	int insertReserve(ReserveDTO reserveDTO) throws Exception;

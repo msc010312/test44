@@ -10,7 +10,7 @@ public class ConnectionPool {
 	private List<ConnectionItem> connectionPool;
 
 	// ConnectionPool 에 저장될 Connection 을 위한 변수
-	private final int size = 10; // 초기 커넥션 풀 크기
+	private final int size = 10000; // 초기 커넥션 풀 크기
 	private String url = "jdbc:oracle:thin:@localhost:1521:xe";;
 	private String id = "System";
 	private String pw = "1234";
@@ -18,7 +18,7 @@ public class ConnectionPool {
 	private static ConnectionPool instance;
 
 	private ConnectionPool() {
-		connectionPool = new ArrayList(size);		
+		connectionPool = new ArrayList(size);
 		Connection conn;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -45,12 +45,15 @@ public class ConnectionPool {
 		if (connectionPool.isEmpty()) {
 			throw new SQLException("[ConnectionPool] 사용 가능한 커넥션이 없습니다.");
 		}
-		return connectionPool.remove(0); // 풀에서 첫 번째 커넥션 반환
+		ConnectionItem item = connectionPool.remove(0);// 풀에서 첫 번째 커넥션 반환
+		item.setUse(true); // 커넥션을 풀에서 가져올 때 사용 중으로 표시
+		return item;
 	}
 
 	public synchronized void releaseConnection(ConnectionItem connectionItem) {
 		if (connectionItem != null) {
-			connectionPool.add(connectionItem); // 사용한 커넥션을 풀에 다시 추가
+			connectionItem.setUse(false); // 커넥션을 풀에 반환할 때 사용 가능으로 표시
+			connectionPool.add(connectionItem);
 		}
 	}
 

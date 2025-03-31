@@ -15,7 +15,7 @@ public class ConnectionItem {
 	
 	public ConnectionItem(Connection conn) {
 		this.conn = conn;
-		isUse = true;
+		isUse = false;
 	}
 	
 	public ConnectionItem(Connection conn,XAResource xaResource) {

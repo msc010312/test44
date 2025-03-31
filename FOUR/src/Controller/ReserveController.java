@@ -36,10 +36,9 @@ public class ReserveController implements SubController {
 			return response;
 		}
 		try {
-
 			// 파라미터 받기
 			// params 에서 rental_id, user_id, reserve_order 추출
-			Integer rental_id = params.get("serviceNo") != null ? (Integer) params.get("serviceNo") : null;
+			Integer rental_id = params.get("rental_id") != null ? (Integer) params.get("rental_id") : null;
 			Integer user_id = params.get("user_id") != null ? (Integer) params.get("user_id") : null;
 			String reserve_order = params.get("reserve_order") != null ? (String) params.get("reserve_order") : null;
 
@@ -48,35 +47,68 @@ public class ReserveController implements SubController {
 			case 1: {
 				System.out.println("[RC] 예약 요청 확인");
 				reserveDTO = new ReserveDTO(rental_id, user_id, reserve_order);
-				// 유효성 검사
-				boolean isOk = isValid(reserveDTO);
-				System.out.println("[No-1 예약 등록] 유효성 검증 확인 : " + isOk);
-				if (!isOk) {
+				boolean isReserved = reserveService.reserveAdd(reserveDTO);
+				if (isReserved) {
+					response.put("message", "예약이 완료되었습니다.");
+					response.put("status", true);
+				} else {
+					response.put("message", "예약에 실패했습니다.");
 					response.put("status", false);
-					return response;
 				}
 				break;
 			}
 
-			// 대여 아이디로 예약 조회
+			// 예약 조회
 			case 2: {
-				System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
+				List<ReserveDTO> list = null;
 				if (user_id != null) {
-					List<ReserveDTO> list = reserveService.ReserveSearchByuserId(user_id);
+					System.out.println("[RC] 유저 아이디로 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchByuserId(user_id);
 					response.put("data", list);
+					response.put("status", true);
 					return response;
+				} else if (rental_id != null) {
+					System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchByRentalId(rental_id);
+					response.put("data", list);
+					response.put("status", true);
+					return response;
+				} else {
+					System.out.println("[RC] 전체 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchAll();
+					response.put("status", true);
+					response.put("data", list);
 				}
+				break;
+			}
 
+			// 예약 수정
+			case 3: {
+				System.out.println("[RC] 예약 수정 요청 확인");
+
+				if (user_id != null && rental_id != null && reserve_order != null) {
+					ReserveDTO updatedReserveDTO = new ReserveDTO();
+					updatedReserveDTO.setUser_id(user_id);
+					updatedReserveDTO.setRental_id(rental_id);
+					updatedReserveDTO.setReserve_order(reserve_order);
+
+					boolean isUpdated = reserveService.ReserveEdit(updatedReserveDTO);
+					if (isUpdated) {
+						response.put("message", "예약 정보가 수정되었습니다.");
+						response.put("status", true);
+					} else {
+						response.put("message", "예약 정보 수정에 실패했습니다.");
+						response.put("status", false);
+					}
+				} else {
+					response.put("message", "수정에 필요한 정보가 부족합니다 (user_id, rental_id, reserve_order).");
+					response.put("status", false);
+				}
 				break;
 			}
-			
-			// 수정
-			case 3:{
-				break;
-			}
-			
+
 			// 삭제
-			case 4 :{
+			case 4: {
 				break;
 			}
 			default:
@@ -88,12 +120,7 @@ public class ReserveController implements SubController {
 		} catch (Exception e) {
 		}
 
-		return null;
-	}
-
-	// 유효성 체크 함수
-	private boolean isValid(ReserveDTO reserveDTO) {
-		return true;
+		return response;
 	}
 
 	// 예외처리함수
