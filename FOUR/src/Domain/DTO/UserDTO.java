@@ -2,7 +2,7 @@ package Domain.DTO;
 
 //저장단위(Controller -> Service <->DAO<->DB)
 public class UserDTO {
-	String user_id;
+	Integer user_id;
 	String user_name;
 	String user_identity;
 	String user_phone;
@@ -12,7 +12,7 @@ public class UserDTO {
 	public UserDTO() {
 	}
 
-	public UserDTO(String user_id, String user_name, String user_identity, String user_phone, String user_addr,
+	public UserDTO(Integer user_id, String user_name, String user_identity, String user_phone, String user_addr,
 			String user_grade) {
 		super();
 		this.user_id = user_id;
@@ -23,11 +23,11 @@ public class UserDTO {
 		this.user_grade = user_grade;
 	}
 
-	public String getUser_id() {
+	public Integer getUser_id() {
 		return user_id;
 	}
 
-	public void setUser_id(String user_id) {
+	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
 	}
 
