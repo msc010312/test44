@@ -50,16 +50,16 @@ public class RentalMenu {
 		System.out.println("대여정보 입력");
 		System.out.println("--------------------------");
 		System.out.print("Rental ID : ");
-		String id = sc.next();
+		int id = sc.nextInt();
 		System.out.println("Book Code : ");
-		String bk = sc.next();
+		int bk = sc.nextInt();
 		System.out.print("User ID : ");
-		String ui = sc.next();
+		int ui = sc.nextInt();
 
 		// 요청처리
 		Map<String, Object> params = new HashMap();
 		params.put("endPoint", "/rental");
-		params.put("serviceNum", 1);
+		params.put("serviceNo", 1);
 		params.put("rental_id", id);
 		params.put("book_code", bk);
 		params.put("user_id", ui);
@@ -75,11 +75,11 @@ public class RentalMenu {
 		System.out.println("대여 정보 조회");
 		System.out.println("--------------------------");
 		System.out.print("User ID: ");
-		String ui = sc.next();
+		int ui = sc.nextInt();
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("endPoint", "/rental");
-		params.put("serviceNum", 2);
+		params.put("serviceNo", 2);
 		params.put("user_id", ui);
 
 		res = controller.execute(params);
@@ -97,11 +97,11 @@ public class RentalMenu {
         System.out.println("대여 정보 삭제");
         System.out.println("--------------------------");
         System.out.print("Rental ID: ");
-        String id = sc.next();
+        int id = sc.nextInt();
 
         Map<String, Object> params = new HashMap<>();
         params.put("endPoint", "/rental");
-        params.put("serviceNum", 4);
+        params.put("serviceNo", 4);
         params.put("rental_id", id);
 
         res = controller.execute(params);

@@ -1,6 +1,7 @@
 package Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Domain.DTO.RentalDTO;
@@ -38,19 +39,28 @@ public class RentalController implements SubController {
 				int book_code = params.get("book_code") != null ? (int) params.get("book_code") : null;
 				int user_id = params.get("user_id") != null ? (int) params.get("user_id") : null;
 				RentalDTO inDto = new RentalDTO(rental_id, book_code, user_id);
+				System.out.println(inDto);
+				Boolean a = rs.insertBookRental(inDto);
+				System.out.println(a);
 				Boolean isOk = isValid(inDto);
 				System.out.println("대여 신청 유효성 검증 확인 : " + isOk);
 				if (!isOk) {
 					response.put("status", false);
 					return response;
 				}
+				
 				break;
 			case 2: // 대여 조회
 				System.out.println("대여 조회 요청");
-				int rental_id2 = params.get("rental_id") != null ? (int) params.get("rental_id") : null;
-				RentalDTO selDto = new RentalDTO();
-				selDto.setRental_id(rental_id2);
-				break;
+				int userid = params.get("user_id") != null ? (int) params.get("user_id") : null;
+				RentalDTO selDto = new RentalDTO(0, 0, userid);
+				List<RentalDTO> res = rs.viewRentalInfo(selDto);
+				if (res == null || res.size() == 0) {
+					response.put("status", false);
+				} else {
+					response.put("data", res);
+				}
+				return response;
 			case 3: // 대여 정보 수정
 				System.out.println("대여 정보 수정 요청");
 				break;

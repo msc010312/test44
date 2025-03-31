@@ -1,6 +1,9 @@
 package Domain.DAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import Domain.DTO.RentalDTO;
 
 public class RentalDAO extends DAO implements RentalDAOInterface {
@@ -18,35 +21,44 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 
 	// CRUD
 	@Override
-	public int insert(RentalDTO rentalDto) throws Exception {
+	public int insert(RentalDTO rentalDto) {
 		try {
-			pstmt = conn.prepareStatement("insert into rental_tbl values(?,?,?)");
+			pstmt = conn.prepareStatement("insert into rental_tbl(rental_id,book_code,user_id) values(?,?,?)");
 			pstmt.setInt(1, rentalDto.getRental_id());
 			pstmt.setInt(2, rentalDto.getBook_code());
 			pstmt.setInt(3, rentalDto.getUser_id());
-
-			return pstmt.executeUpdate();
-		} catch (SQLException e) {
+			System.out.println("1");
+			int rowsAffected = pstmt.executeUpdate();
+	        System.out.println("rowsAffected: " + rowsAffected);  // 실행된 행 수 확인
+			System.out.println("2");
+			return rowsAffected;
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new SQLException("RentalDAO : INSERT SQL EXCEPTION");
+//			throw new SQLException("RentalDAO : INSERT SQL EXCEPTION");
 		} finally {
 			try {
 				pstmt.close();
 			} catch (Exception e) {
 			}
 		}
+		return 0;
 	}
 
 	@Override
-	public int select(RentalDTO rentalDto) throws Exception {
+	public List<RentalDTO> select(RentalDTO rentalDto) throws Exception {
 		try {
+			List<RentalDTO> list = new ArrayList();
 			String sql = "SELECT * FROM rental_tbl WHERE user_id = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rentalDto.getUser_id());
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
-	            return rs.getInt("rental_id"); // rental_id 값만 반환
-	        }
+			while (rs.next()) {
+				System.out.println(rs.getInt("user_id"));
+				RentalDTO rd = new RentalDTO(rs.getInt("rental_id"), rs.getInt("book_code"), rs.getInt("user_id"));
+				list.add(rd);
+
+			}
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SQLException("RentalDAO : SELECT SQL EXCEPTION");
@@ -57,7 +69,6 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 			} catch (Exception e) {
 			}
 		}
-		return -1;
 	}
 
 	@Override

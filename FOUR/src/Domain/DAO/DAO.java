@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public abstract class DAO {
-	protected PreparedStatement pstmt;
+	protected PreparedStatement pstmt = null;
 	protected ResultSet rs;
 	protected static Connection conn;
 	protected static final String ID = "system";

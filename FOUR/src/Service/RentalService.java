@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.List;
+
 import Domain.DAO.RentalDAO;
 import Domain.DAO.RentalDAOInterface;
 import Domain.DTO.BookDTO;
@@ -12,7 +14,7 @@ public class RentalService {
 
 	private RentalService() throws Exception {
 		rentaldao = RentalDAO.getInstance();
-		System.out.println("[SERVICE] BookServiceImpl init");
+		System.out.println("[SERVICE] RentalServiceImpl init");
 	};
 
 	public static RentalService getInstance() throws Exception {
@@ -22,7 +24,10 @@ public class RentalService {
 	}
 
 	// Tx 처리 + 비지니스 유효성검사(정책)
-	public boolean registration(RentalDTO rentaldto) throws Exception {
+	public boolean insertBookRental(RentalDTO rentaldto) throws Exception {
 		return rentaldao.insert(rentaldto) > 0;
+	}
+	public List<RentalDTO> viewRentalInfo(RentalDTO rentaldto) throws Exception {
+		return rentaldao.select(rentaldto);
 	}
 }
