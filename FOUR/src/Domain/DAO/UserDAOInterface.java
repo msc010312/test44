@@ -10,12 +10,12 @@ public interface UserDAOInterface {
 	// CRUD
 	int insert(UserDTO userDTO) throws Exception;
 
-	int update(UserDTO userDTO) throws SQLException;
+	int update(UserDTO userDTO) throws Exception;
 
-	int delete(UserDTO userDTO) throws SQLException;
+	int delete(UserDTO userDTO) throws Exception;
 
-	UserDTO select(UserDTO userDTO);
+	UserDTO select(UserDTO userDTO) throws Exception;
 
-	List<UserDTO> selectAll();
+	List<UserDTO> selectAll() throws Exception;
 
 }
