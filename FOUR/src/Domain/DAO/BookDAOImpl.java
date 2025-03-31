@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Domain.DTO.BookDTO;
+import Domain.DTO.ClassificationDTO;
 
 public class BookDAOImpl extends DAO implements BookDAOInterface {
 	
@@ -29,11 +30,16 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 	@Override
 	public int insert(BookDTO BookDTO) throws Exception {
 		try {
-			pstmt = conn.prepareStatement("insert into tbl_book values(?,?,?,?)");
+			// 1. Classification 테이블에서 필요한 값을 조회
+	        String classificationId = getClassificationId(ClassificationDTO.getClassificationid());
+			
+			pstmt = conn.prepareStatement("INSERT INTO tbl_book (book_code, classification_id, book_auther, book_name, publisher, isreserve) values(?,?,?,?,?,?)");
 			pstmt.setString(1, BookDTO.getBookCode());
-			pstmt.setString(2, BookDTO.getBookName());
-			pstmt.setString(3, BookDTO.getPublisher());
-			pstmt.setString(4, BookDTO.getIsbn());
+			pstmt.setString(2, ClassificationDTO.getClassificationid());
+			pstmt.setString(3, BookDTO.getBookAuther());
+			pstmt.setString(4, BookDTO.getBookName());
+			pstmt.setString(5, BookDTO.getPublisher());
+			pstmt.setString(6, BookDTO.getIsreserve());
 			
 			
 			return pstmt.executeUpdate();
@@ -43,6 +49,11 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		} finally {
 			try {pstmt.close();} catch (Exception e2) {}
 		}
+	}
+
+	private String getClassificationId(String classificationid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

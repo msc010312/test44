@@ -37,10 +37,11 @@ public class BookController implements SubController {
 			case 1: // 책 등록
 				System.out.println("[BC] 책 등록 요청");
 				String bookCode = params.get("bookCode") != null ? (String) params.get("bookCode") : null;
+				String classificationid = params.get("classificationid") != null ? (String) params.get("classificationid") : null;
 				String bookName = params.get("bookName") != null ? (String) params.get("bookName") : null;
 				String publisher = params.get("publisher") != null ? (String) params.get("publisher") : null;
-				String isbn = params.get("isbn") != null ? (String) params.get("isbn") : null;
-				BookDTO bookDTO = new BookDTO(bookCode, bookName, publisher, isbn);
+				String isreserve = params.get("isreserve") != null ? (String) params.get("isreserve") : null;
+				BookDTO bookDTO = new BookDTO(bookCode, classificationid, bookName, publisher, isreserve);
 				Boolean isOk = isValid(bookDTO);
 				System.out.println("[No-1 책 등록] 유효성 검증 확인 : " + isOk);
 				if (!isOk) {
