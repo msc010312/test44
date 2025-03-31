@@ -1,44 +1,55 @@
 package Domain.DTO;
 
 public class BookDTO {
-	private String book_Code;
-	private String book_Auther;
-	private String book_Name;
-	private String publisher;
-	private String isreserve;
+	int book_Code;
+	int classification_id;
+	String book_Auther;
+	String book_Name;
+	String publisher;
+	int isreserve;
 
 	public BookDTO() {
 	};
 
-	public BookDTO(String bookCode, String bookAuther, String bookName, String publisher, String isreserve) {
+	public BookDTO(int bookCode, int classificationId, String bookAuther, String bookName, String publisher, int isreserve) {
 		super();
 		this.book_Code = bookCode;
+		this.classification_id = classificationId; 
 		this.book_Auther = bookAuther;
 		this.book_Name = bookName;
 		this.publisher = publisher;
 		this.isreserve = isreserve;
 	}
 
-	public String getBookCode() {
+	public int getBook_Code() {
 		return book_Code;
 	}
 
-	public void setBookCode(String bookCode) {
+	public void setBook_Code(int bookCode) {
 		this.book_Code = bookCode;
 	}
-	public String getBookAuther() {
+
+	public int getClassification_id() {
+		return classification_id;
+	}
+
+	public void setClassification_id(int classificationId) {
+		this.classification_id = classificationId;
+	}
+
+	public String getBook_Auther() {
 		return book_Auther;
 	}
-	
-	public void setBookAuther(String bookAuther) {
+
+	public void setBook_Auther(String bookAuther) {
 		this.book_Auther = bookAuther;
 	}
 
-	public String getBookName() {
+	public String getBook_Name() {
 		return book_Name;
 	}
 
-	public void setBookName(String bookName) {
+	public void setBook_Name(String bookName) {
 		this.book_Name = bookName;
 	}
 
@@ -50,18 +61,21 @@ public class BookDTO {
 		this.publisher = publisher;
 	}
 
-	public String getIsreserve() {
+	public int getIsreserve() {
 		return isreserve;
 	}
 
-	public void setIsbn(String isreserve) {
+	public void setIsreserve(int isreserve) {
 		this.isreserve = isreserve;
 	}
 
 	@Override
 	public String toString() {
-		return "BookDTO [bookCode=" + book_Code + ", bookAuther" + book_Auther + ", bookName=" + book_Name + ", publisher=" + publisher + ", isreserve="
-				+ isreserve + "]";
+		return "BookDTO [book_Code=" + book_Code + ", classification_id=" + classification_id + ", book_Auther="
+				+ book_Auther + ", book_Name=" + book_Name + ", publisher=" + publisher + ", isreserve=" + isreserve
+				+ "]";
 	}
+
+	
 
 }

@@ -21,6 +21,7 @@ public class BookController implements SubController {
 		}
 	}
 
+	@SuppressWarnings("finally")
 	@Override
 	public Map<String, Object> execute(Map<String, Object> params) {
 		System.out.println("[BC] BookController execute Invoke");
@@ -36,12 +37,13 @@ public class BookController implements SubController {
 			switch (serviceNo) {
 			case 1: // 책 등록
 				System.out.println("[BC] 책 등록 요청");
-				String bookCode = params.get("bookCode") != null ? (String) params.get("bookCode") : null;
-				String classificationid = params.get("classificationid") != null ? (String) params.get("classificationid") : null;
-				String bookName = params.get("bookName") != null ? (String) params.get("bookName") : null;
-				String publisher = params.get("publisher") != null ? (String) params.get("publisher") : null;
-				String isreserve = params.get("isreserve") != null ? (String) params.get("isreserve") : null;
-				BookDTO bookDTO = new BookDTO(bookCode, classificationid, bookName, publisher, isreserve);
+				int bookCode = params.get("Book_Code") != null ? (int) params.get("Book_Code") : null;
+				int classificationId = params.get("Classification_Id") != null ? (int) params.get("Classification_Id") : null;
+				String bookAuther = params.get("Book_Auther") != null ? (String) params.get("Book_Auther") : null;
+				String bookName = params.get("Book_Name") != null ? (String) params.get("Book_Name") : null;
+				String publisher = params.get("Publisher") != null ? (String) params.get("Publisher") : null;
+				int isreserve = params.get("Isreserve") != null ? (int) params.get("Isreserve") : null;
+				BookDTO bookDTO = new BookDTO(bookCode, classificationId, bookAuther, bookName, publisher, isreserve);
 				Boolean isOk = isValid(bookDTO);
 				System.out.println("[No-1 책 등록] 유효성 검증 확인 : " + isOk);
 				if (!isOk) {
@@ -81,18 +83,18 @@ public class BookController implements SubController {
 	}
 
 	private Boolean isValid(BookDTO bookDTO) {
-		System.out.println(bookDTO.getBookCode());
-		System.out.println(bookDTO.getBookCode().length());
-		if (bookDTO.getBookCode() == null || bookDTO.getBookCode().length() != 8) {
-			response.put("error", "[INVALID] bookCode의 길이는 8글자이어야 합니다");
-			System.out.println("[INVALID] bookCode의 길이는 8글자이어야 합니다");
-			return false;
-		}
-		if (bookDTO.getBookName().length() > 255) {
-			response.put("error", "[INVALID] bookName의 길이는 255자를 넘을 수 없습니다");
-			System.out.println("[INVALID] bookName의 길이는 255자를 넘을 수 없습니다");
-			return false;
-		}
+//		System.out.println(bookDTO.getBook_Code());
+//		System.out.println(bookDTO.getBook_Code().length());
+//		if (bookDTO.getBook_Code() == null || bookDTO.getBook_Code().length() != 4) {
+//			response.put("error", "[INVALID] bookCode의 길이는 4글자이어야 합니다");
+//			System.out.println("[INVALID] bookCode의 길이는 4글자이어야 합니다");
+//			return false;
+//		}
+//		if (bookDTO.getBook_Name().length() > 255) {
+//			response.put("error", "[INVALID] bookName의 길이는 255자를 넘을 수 없습니다");
+//			System.out.println("[INVALID] bookName의 길이는 255자를 넘을 수 없습니다");
+//			return false;
+//		}
 		return true;
 	}
 
