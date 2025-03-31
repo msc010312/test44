@@ -30,8 +30,12 @@ public class ReserveMenu {
 			int num = sc.nextInt();
 			params.put("serviceNo", num);
 			switch (num) {
-			case 1:
+			// 예약 신청
+			case 1: {
 				break;
+			}
+
+			// 예약조회
 			case 2: {
 				System.out.println("원하는 서비스를 선택하세요.");
 				System.out.println("1 : 유저 아이디별 예약 조회");
@@ -39,27 +43,37 @@ public class ReserveMenu {
 				System.out.println("3 : 전체 예약 조회");
 				int searchNo = sc.nextInt();
 				switch (searchNo) {
+				// id별 조회
 				case 1: {
 					System.out.print("User_Id : ");
 					params.put("user_id", sc.nextInt());
 
-					response = controller.execute(params);
 					break;
 				}
+
+				// 렌탈 id별 조회
 				case 2: {
 					System.out.print("Rental_Id : ");
 					params.put("rental_id", sc.nextInt());
 					break;
 				}
-				case 3:
-					break;
-				case 4:
-					break;
-				case 5:
-					prev = !prev;
 				}
+				response = controller.execute(params);
 			}
 
+			// 예약 수정
+			case 3: {
+				break;
+			}
+
+			// 예약 삭제
+			case 4: {
+				break;
+			}
+			// 종료
+			case 5:
+				prev = !prev;
+				break;
 			}
 			for (String key : response.keySet()) {
 				System.out.println(key + " : " + response.get(key));
