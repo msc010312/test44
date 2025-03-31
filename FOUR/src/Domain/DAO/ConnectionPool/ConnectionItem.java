@@ -64,8 +64,7 @@ public class ConnectionItem {
 
 	public boolean getInTransaction() {
 		// TODO Auto-generated method stub
-		return this.inTransaction
-				;
+		return this.inTransaction;
 	}
 	
 	

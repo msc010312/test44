@@ -26,8 +26,8 @@ public class ConnectionPool {
 			for (int i = 0; i < size; i++) {
 				conn = DriverManager.getConnection(url, id, pw);
 				connectionPool.add(new ConnectionItem(conn));
-				System.out.println("DB CONNECTED");
 			}
+			System.out.println("DB CONNECTED");
 
 		} catch (Exception e) {
 			System.err.println("[ConnectionPool] Oracle JDBC 드라이버를 찾을 수 없습니다: " + e.getMessage());
