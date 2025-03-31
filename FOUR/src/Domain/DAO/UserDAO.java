@@ -8,22 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Domain.DAO.ConnectionPool.ConnectionPool;
 import Domain.DTO.UserDTO;
 
 public class UserDAO extends DAO implements UserDAOInterface {
-
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	String id = "system";
-	String pw = "1234";
 
 	// 싱글톤 패턴처리
 	private static UserDAOInterface instance;
 
 	private UserDAO() throws Exception {
 		System.out.println("[DAO] UserDAOImpl init");
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		conn = DriverManager.getConnection(url, id, pw);
-		System.out.println("[DAO] UserDAOImpl DB Success");
+		connectionPool = ConnectionPool.getInstance();
 	}
 
 	public static UserDAOInterface getInstance() throws Exception {
@@ -36,7 +31,8 @@ public class UserDAO extends DAO implements UserDAOInterface {
 	@Override
 	public int insert(UserDTO userDTO) throws Exception {
 		try {
-
+			connectionItem = connectionPool.getInstance().getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("insert into user_tbl values(?,?,?,?,?,?)");
 			pstmt.setInt(1, userDTO.getUser_id());
 			pstmt.setString(2, userDTO.getUser_name());
@@ -51,6 +47,7 @@ public class UserDAO extends DAO implements UserDAOInterface {
 			throw new SQLException("USERDAO : INSERT SQL EXCEPTION");
 		} finally {
 			try {
+				connectionPool.releaseConnection(connectionItem);
 				pstmt.close();
 			} catch (Exception e2) {
 			}
@@ -60,7 +57,8 @@ public class UserDAO extends DAO implements UserDAOInterface {
 	@Override
 	public int update(UserDTO userDTO) throws SQLException {
 		try {
-
+			connectionItem = connectionPool.getInstance().getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement(
 					"update user_tbl set user_name = ?, user_identity = ?, user_phone = ?, user_addr = ? where user_id = ?");
 			pstmt.setString(1, userDTO.getUser_name());
@@ -76,6 +74,7 @@ public class UserDAO extends DAO implements UserDAOInterface {
 			throw new SQLException("USERDAO : UPDATE SQL EXCEPTION");
 		} finally {
 			try {
+				connectionPool.releaseConnection(connectionItem);
 				pstmt.close();
 			} catch (Exception e2) {
 			}
@@ -85,7 +84,8 @@ public class UserDAO extends DAO implements UserDAOInterface {
 	@Override
 	public int delete(UserDTO userDTO) throws Exception {
 		try {
-
+			connectionItem = connectionPool.getInstance().getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("delete from user_tbl where user_id = ?");
 			pstmt.setInt(1, userDTO.getUser_id());
 			return pstmt.executeUpdate();
@@ -94,6 +94,7 @@ public class UserDAO extends DAO implements UserDAOInterface {
 			throw new SQLException("USERDAO : INSERT SQL EXCEPTION");
 		} finally {
 			try {
+				connectionPool.releaseConnection(connectionItem);
 				pstmt.close();
 			} catch (Exception e2) {
 			}
@@ -103,7 +104,8 @@ public class UserDAO extends DAO implements UserDAOInterface {
 	@Override
 	public UserDTO select(UserDTO userDTO) throws Exception {
 		try {
-
+			connectionItem = connectionPool.getInstance().getConnection();
+			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("select * from user_tbl where user_id = ?");
 			pstmt.setInt(1, userDTO.getUser_id());
 
@@ -120,6 +122,7 @@ public class UserDAO extends DAO implements UserDAOInterface {
 			throw new SQLException("USERDAO : SELECT SQL EXCEPTION");
 		} finally {
 			try {
+				connectionPool.releaseConnection(connectionItem);
 				pstmt.close();
 			} catch (Exception e2) {
 			}
@@ -129,6 +132,8 @@ public class UserDAO extends DAO implements UserDAOInterface {
 	@Override
 	public List<UserDTO> selectAll() throws Exception {
 		try {
+			connectionItem = connectionPool.getInstance().getConnection();
+			Connection conn = connectionItem.getConn();
 			List<UserDTO> rUserDTOL = new ArrayList();
 			pstmt = conn.prepareStatement("select * from user_tbl");
 
@@ -147,6 +152,7 @@ public class UserDAO extends DAO implements UserDAOInterface {
 			throw new SQLException("USERDAO : SELECTALL SQL EXCEPTION");
 		} finally {
 			try {
+				connectionPool.releaseConnection(connectionItem);
 				pstmt.close();
 			} catch (Exception e2) {
 			}
