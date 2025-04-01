@@ -51,18 +51,15 @@ public class UserController implements SubController {
 				System.out.println("[UC] 회원가입 요청 확인");
 				String user_grade = "ROLE_USER";
 				userDTO = new UserDTO(user_id, user_name, user_identity, user_phone, user_addr, user_grade);
-				Boolean isOk = isValid(userDTO);
-				System.out.println("[No-1 회원가입] 유효성 검증 확인 : " + isOk);
-				if (!isOk) {
-					response.put("status", false);
-					return response;
-				}
-
+				
 				boolean isSuccess = userService.userJoin(userDTO);
 
 				if (isSuccess) {
 					response.put("status", isSuccess);
 					response.put("message", "회원가입 성공");
+				} else {
+					response.put("status", isSuccess);
+					response.put("message", "회원가입 실패");
 				}
 				break;
 			}
@@ -85,24 +82,24 @@ public class UserController implements SubController {
 						response.put("data", rUserDTO);
 					else
 						response.put("data", rUserDTOL);
+				} else {
+					response.put("status", false);
+					response.put("message", "회원조회 실패");
 				}
 				break;
 			}
 			case 3: { // U - 회원 정보 수정
 				System.out.println("[UC] 회원 정보 수정 요청 확인");
 				userDTO = new UserDTO(user_id, user_name, user_identity, user_phone, user_addr, null);
-				Boolean isOk = isValid(userDTO);
-				System.out.println("[No-1 회원수정] 유효성 검증 확인 : " + isOk);
-				if (!isOk) {
-					response.put("status", false);
-					return response;
-				}
 
 				boolean isSuccess = userService.userEdit(userDTO);
 
 				if (isSuccess) {
 					response.put("status", isSuccess);
 					response.put("message", "회원수정 성공");
+				} else {
+					response.put("status", isSuccess);
+					response.put("message", "회원수정 실패");
 				}
 				break;
 			}
@@ -115,44 +112,21 @@ public class UserController implements SubController {
 				if (isSuccess) {
 					response.put("status", isSuccess);
 					response.put("message", "회원탈퇴 성공");
+				} else {
+					response.put("status", isSuccess);
+					response.put("message", "회원탈퇴 실패");
 				}
-				break;
-			}
-			case 5: { // P - 로그인
-				System.out.println("[UC] 로그인 요청 확인");
-				break;
-			}
-			case 6: { // P - 로그아웃
-				System.out.println("[UC] 로그아웃 요청 확인");
 				break;
 			}
 			default:
 				System.err.println("[UC] 잘못된 요청 번호");
-				response.put("message", "잘못된 서비스 요청입니다.");
 				response.put("status", false);
+				response.put("message", "잘못된 서비스 요청입니다.");
 			}
 		} catch (Exception e) {
 			execeptionHandler(e);
 		}
 		return response;
-	}
-
-	private boolean isValid(UserDTO userDTO) {
-//		if (userDTO.getUser_id() == null || userDTO.getUser_id().length() <= 4) {
-//			response.put("error", "[INVALID] userid의 길이는 최소 5자 이상이어야 합니다");
-//			System.out.println("[INVALID] userid의 길이는 최소 5자 이상이어야 합니다");
-//			return false;
-//		}
-//		if (userDTO.getUser_id().matches("^[0-9].*")) {
-//			response.put("error", "[INVALID] userid의 첫문자로 숫자가 들어올 수 없습니다.");
-//			System.out.println("[INVALID] userid의 첫문자로 숫자가 들어올 수 없습니다.");
-//			return false;
-//		}
-		// NULL 체크 / 데이터(자료)수준에서의 의미있는 데이터가 포함되어져 있는지 여부
-		// userid 는 첫문자가 숫자인지 여부 or 길이 체크
-		// username 은 첫문자가 숫자인지 여부
-		// password 복잡도체크는 bnusiness(Policy에 의한 처리)
-		return true;
 	}
 
 	// 예외처리함수
