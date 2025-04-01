@@ -20,7 +20,6 @@ public class RentalDAO extends DAO implements RentalDAOInterface {
 	@Override
 	public int insert(RentalDTO rentalDto) throws Exception {
 		try {
-			conn.setAutoCommit(true);
 			connectionItem = connectionPool.getConnection();
 			Connection conn = connectionItem.getConn();
 			pstmt = conn.prepareStatement("select book_code from rental_tbl where book_code = ? ");
