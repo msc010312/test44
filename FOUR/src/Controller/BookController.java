@@ -1,9 +1,11 @@
 package Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Domain.DTO.BookDTO;
+import Domain.DTO.UserDTO;
 import Service.BookServiceImpl;
 
 
@@ -34,15 +36,17 @@ public class BookController implements SubController {
 			return response;
 		}
 		try {
+			//파라미터
+			int bookCode = params.get("Book_Code") != null ? (int) params.get("Book_Code") : null;
+			int classificationId = params.get("Classification_Id") != null ? (int) params.get("Classification_Id") : null;
+			String bookAuther = params.get("Book_Auther") != null ? (String) params.get("Book_Auther") : null;
+			String bookName = params.get("Book_Name") != null ? (String) params.get("Book_Name") : null;
+			String publisher = params.get("Publisher") != null ? (String) params.get("Publisher") : null;
+			int isreserve = params.get("Isreserve") != null ? (int) params.get("Isreserve") : null;
+			
 			switch (serviceNo) {
 			case 1: // 책 등록
 				System.out.println("[BC] 책 등록 요청");
-				int bookCode = params.get("Book_Code") != null ? (int) params.get("Book_Code") : null;
-				int classificationId = params.get("Classification_Id") != null ? (int) params.get("Classification_Id") : null;
-				String bookAuther = params.get("Book_Auther") != null ? (String) params.get("Book_Auther") : null;
-				String bookName = params.get("Book_Name") != null ? (String) params.get("Book_Name") : null;
-				String publisher = params.get("Publisher") != null ? (String) params.get("Publisher") : null;
-				int isreserve = params.get("Isreserve") != null ? (int) params.get("Isreserve") : null;
 				BookDTO bookDTO = new BookDTO(bookCode, classificationId, bookAuther, bookName, publisher, isreserve);
 				Boolean isOk = isValid(bookDTO);
 				System.out.println("[No-1 책 등록] 유효성 검증 확인 : " + isOk);
@@ -58,17 +62,40 @@ public class BookController implements SubController {
 				}
 				break;
 			case 2: // 책 조회
-				if (params.get("bookCode") != null) {
-					System.out.println("[BC] 책 단일 조회 요청");
-				} else {
-					System.out.println("[BC] 책 전체 조회 요청");
-				}
-				break;
+				 BookDTO bookDTO1 = new BookDTO(-1, -1, null, bookName, null, -1);
+				 
+				 BookDTO book1DTO = null;
+			     List<BookDTO> book5 = null;
+		        if (bookDTO1.getBook_Name() == null) {
+		            System.out.println("[BC] 도서 정보 전체 조회 요청");
+		            book5 = bookService.bookSearchAll();
+		        } else {
+		            System.out.println("[BC] 특정 도서 조회 요청");
+		            bookDTO1.setBook_Name((String) params.get("Book_Name"));
+		        }
+
+		        if (book1DTO != null || book5 != null) {
+		            response.put("status", true);
+		            response.put("message", "도서 조회 성공");
+		            if(book1DTO != null)
+		            	response.put("data", book1DTO);
+		        } else 
+		            response.put("status", book5);
+		        
+			break;
 			case 3: // 책 수정
 				System.out.println("[BC] 책 수정 요청");
 				break;
 			case 4: // 책 삭제
-				System.out.println("[BC] 책 삭제 요청");
+				System.out.println("[UC] 도서 수정 요청 확인");
+				bookDTO = new BookDTO(bookCode, -1, null, null, null, -1);
+				
+				boolean isSuccess1 = bookService.bookDelete(bookDTO);
+
+				if (isSuccess1) {
+					response.put("status", isSuccess1);
+					response.put("message", "도서삭제 성공");
+				}
 				break;
 			default:
 				System.err.println("[BC] 잘못된 요청 번호");
@@ -101,7 +128,7 @@ public class BookController implements SubController {
 	// 예외처리함수
 	public Map<String, Object> execeptionHandler(Exception e) {
 		if (response == null)
-			response = new HashMap();
+			response = new HashMap<>();
 		response.put("status", false);
 		response.put("message", e.getMessage());
 		response.put("exeception", e);

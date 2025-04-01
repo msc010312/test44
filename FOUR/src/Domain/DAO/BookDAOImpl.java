@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import Domain.DAO.ConnectionPool.ConnectionItem;
 import Domain.DAO.ConnectionPool.ConnectionPool;
 import Domain.DTO.BookDTO;
+import Domain.DTO.UserDTO;
 
 public class BookDAOImpl extends DAO implements BookDAOInterface {
 	
@@ -39,7 +41,7 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		PreparedStatement pstmt = null;
 		try {
 			// 1. Classification 테이블에서 필요한 값을 조회
-//	        String classificationId = getClassificationId(BookDTO.getClassification_id());
+//	        int classificationId = getClassificationId(BookDTO.getClassification_id());
 		
 			connectionItem = connectionPool.getConnection();
 			Connection conn = connectionItem.getConn();
@@ -62,23 +64,23 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 	}
 	
     // Classification 테이블에서 classificationId를 조회하는 메소드
-    private String getClassificationId(String classificationName) throws SQLException {
-        String classificationId = null;
+    private int getClassificationId(int classificationId) throws SQLException {
+        int resultId = -1;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             // SQL 쿼리 실행
-            String sql = "SELECT classification_id FROM classification_tbl WHERE classification_name = ?";
+            String sql = "SELECT classification_id FROM classification_tbl WHERE classification_Id = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, classificationName);  // getClassificationName()으로 수정
+            pstmt.setInt(1, classificationId);
             rs = pstmt.executeQuery();
 
             // 결과 처리
             if (rs.next()) {
-                classificationId = rs.getString("classification_id");
+                classificationId = rs.getInt("classification_id");
             } else {
-                throw new SQLException("No classification found with name: " + classificationName);
+                throw new SQLException("No classification found with Id: " + classificationId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,39 +95,105 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 
 	@Override
 	public int update(BookDTO BookDTO) throws SQLException {
-		try {
-			pstmt = conn.prepareStatement("");
-			return pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new SQLException("BookDAO : UPDATE SQL EXCEPTION");
-		} finally {
-			try {pstmt.close();} catch (Exception e2) {}
-		}
+		
+		 try {
+	            connectionItem = connectionPool.getConnection();
+	            Connection conn = connectionItem.getConn();
+
+	            String sql = "UPDATE book_tbl SET book_Auther = ?, book_Name = ?, publisher = ?, isreserve = ? WHERE book_Code = ?";
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, BookDTO.getBook_Auther());
+	            pstmt.setString(2, BookDTO.getBook_Name());
+	            pstmt.setString(3, BookDTO.getPublisher());
+	            pstmt.setInt(4, BookDTO.getIsreserve());
+	            pstmt.setInt(5, BookDTO.getBook_Code());
+
+	            return pstmt.executeUpdate();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            throw new SQLException("BookDAO : UPDATE SQL EXCEPTION");
+	        } finally {
+	            if (pstmt != null) try { pstmt.close(); } catch (SQLException e2) {}
+	        }
 		
 	}
 
 	@Override
 	public int delete(BookDTO BookDTO) throws SQLException {
 		try {
-			pstmt = conn.prepareStatement("");
+
+			pstmt = conn.prepareStatement("delete from book_tbl where book_Code = ?");
+			pstmt.setInt(1, BookDTO.getBook_Code());
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new SQLException("BookDAO : DELETE SQL EXCEPTION");
+			throw new SQLException("BOOKDAO : INSERT SQL EXCEPTION");
 		} finally {
-			try {pstmt.close();} catch (Exception e2) {}
+			try {
+				pstmt.close();
+			} catch (Exception e2) {
+			}
 		}
 		
 	}
 
 	@Override
-	public BookDTO select(BookDTO BookDTO) {
-		return null;
+	public BookDTO select(BookDTO BookDTO) throws SQLException {
+		try {
+
+			pstmt = conn.prepareStatement("select * from book_tbl where book_Code = ?");
+			pstmt.setInt(1, BookDTO.getBook_Code());
+
+			rs = pstmt.executeQuery();
+			rs.next();
+			Domain.DTO.BookDTO book1DTO = new BookDTO(rs.getInt("book_Code"), rs.getInt("classification_id"),
+					rs.getString("book_Auther"), rs.getString("book_Name"), rs.getString("publisher"),
+					rs.getInt("isreserve"));
+
+			return book1DTO;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("BOOKDAO : SELECT SQL EXCEPTION");
+		} finally {
+			try {
+				pstmt.close();
+			} catch (Exception e2) {
+			}
+		}
 	}
 
 	@Override
-	public List<BookDTO> selectAll() {
-		return null;
+	public List<BookDTO> selectAll() throws Exception {
+	    try {
+	    	List<BookDTO> bookList = new ArrayList();
+	        connectionItem = connectionPool.getConnection();
+	        Connection conn = connectionItem.getConn();
+
+	        String sql = "SELECT * FROM book_tbl";
+	        pstmt = conn.prepareStatement(sql);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            BookDTO book = new BookDTO();
+	            book.setBook_Code(rs.getInt("book_Code"));
+	            book.setClassification_id(rs.getInt("classification_id"));
+	            book.setBook_Auther(rs.getString("book_Auther"));
+	            book.setBook_Name(rs.getString("book_Name"));
+	            book.setPublisher(rs.getString("publisher"));
+	            book.setIsreserve(rs.getInt("isreserve"));
+	            bookList.add(book);
+	        }
+	        return bookList;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new SQLException("BookDAO : SELECTALL SQL EXCEPTION");
+	    } finally {
+	        try {
+	        	pstmt.close();
+	        }catch(Exception e2) {
+	        	
+	        }
+	    }
 	}
 }

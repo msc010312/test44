@@ -14,8 +14,8 @@ public interface BookDAOInterface {
 
 	int delete(BookDTO BookDTO) throws SQLException;
 
-	BookDTO select(BookDTO BookDTO);
+	BookDTO select(BookDTO BookDTO)throws Exception;
 
-	List<BookDTO> selectAll();
+	List<BookDTO> selectAll() throws Exception;
 
 }
