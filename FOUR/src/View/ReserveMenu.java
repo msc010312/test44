@@ -66,6 +66,8 @@ public class ReserveMenu {
 				}
 				}
 				response = controller.execute(params);
+				params.remove("rental_id");
+				params.remove("user_id");
 			}
 
 			// 예약 수정
@@ -90,6 +92,7 @@ public class ReserveMenu {
 			for (String key : response.keySet()) {
 				System.out.println(key + " : " + response.get(key));
 			}
+			
 		}
 	}
 }
