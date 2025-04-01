@@ -53,7 +53,7 @@ public class BookMenu {
 				System.out.print("조회 : ");
 				if (sc.nextInt() == 1) {
 					System.out.print("Book_Name : ");
-					params.put("Book_Name", sc.nextInt());
+					params.put("Book_Name", sc.next());
 				}
 				response = controller.execute(params);
 				params.remove("Book_Name");
@@ -62,13 +62,13 @@ public class BookMenu {
 				System.out.print("Book_Code : ");
 				params.put("Book_Code", sc.nextInt());
 				System.out.print("Classification_Id : ");
-				params.put("Classification_Id", sc.next());
+				params.put("Classification_Id", sc.nextInt());
 				System.out.print("Book_Auther : ");
 				params.put("Book_Auther", sc.next());
 				System.out.print("Publisher : ");
 				params.put("Publisher", sc.next());
 				System.out.print("Isreserve : ");
-				params.put("Isreserve", sc.next());
+				params.put("Isreserve", sc.nextInt());
 				response = controller.execute(params);
 				break;
 			case 4:
