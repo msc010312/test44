@@ -32,6 +32,13 @@ public class ReserveMenu {
 			switch (num) {
 			// 예약 신청
 			case 1: {
+				System.out.print("Rental_Id : ");
+				params.put("rental_id", sc.nextInt());
+				System.out.print("User_Id : ");
+				params.put("user_id", sc.nextInt());
+				System.out.print("Reserve_Order : ");
+				params.put("reserve_order", sc.nextInt());
+				response = controller.execute(params);
 				break;
 			}
 
