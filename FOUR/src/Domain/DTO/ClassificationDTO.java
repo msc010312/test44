@@ -1,24 +1,24 @@
 package Domain.DTO;
 
 public class ClassificationDTO {
-	private String classification_id;
+	private int classification_id;
 	private String classification_name;
 	
 	public void ClassificationDTO() {
 		
 	}
 
-	public ClassificationDTO(String classificationId, String classificationName) {
+	public ClassificationDTO(int classificationId, String classificationName) {
 		super();
 		this.classification_id = classificationId;
 		this.classification_name = classificationName;
 	}
 
-	public String getClassificationid() {
+	public int getClassificationid() {
 		return classification_id;
 	}
 
-	public void setClassificationid(String classificationId) {
+	public void setClassificationid(int classificationId) {
 		this.classification_id = classificationId;
 	}
 
