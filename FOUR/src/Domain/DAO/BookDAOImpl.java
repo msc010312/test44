@@ -72,7 +72,10 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		try {
+		try {			
+			connectionItem = connectionPool.getConnection();
+			Connection conn = connectionItem.getConn();
+			
 			// SQL 쿼리 실행
 			String sql = "SELECT classification_id FROM classification_tbl WHERE classification_Id = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -111,7 +114,7 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 			connectionItem = connectionPool.getConnection();
 			Connection conn = connectionItem.getConn();
 
-			String sql = "UPDATE book_tbl SET book_Auther = ?, book_Name = ?, publisher = ?, isreserve = ? WHERE book_Code = ?";
+			String sql = "UPDATE book_tbl SET book_Author = ?, book_Name = ?, publisher = ?, isreserve = ? WHERE book_Code = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, BookDTO.getBook_Auther());
 			pstmt.setString(2, BookDTO.getBook_Name());
@@ -126,7 +129,8 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		} finally {
 			if (pstmt != null)
 				try {
-					pstmt.close();
+					pstmt.close();					
+					connectionPool.releaseConnection(connectionItem);
 				} catch (SQLException e2) {
 				}
 		}
@@ -137,6 +141,9 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 	public int delete(BookDTO BookDTO) throws SQLException {
 		try {
 
+			connectionItem = connectionPool.getConnection();
+			Connection conn = connectionItem.getConn();
+			
 			pstmt = conn.prepareStatement("delete from book_tbl where book_Code = ?");
 			pstmt.setInt(1, BookDTO.getBook_Code());
 			return pstmt.executeUpdate();
@@ -146,6 +153,8 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		} finally {
 			try {
 				pstmt.close();
+				conn.close();
+				connectionPool.releaseConnection(connectionItem);
 			} catch (Exception e2) {
 			}
 		}
@@ -209,6 +218,8 @@ public class BookDAOImpl extends DAO implements BookDAOInterface {
 		} finally {
 			try {
 				pstmt.close();
+				conn.close();
+				connectionPool.releaseConnection(connectionItem);
 			} catch (Exception e2) {
 
 			}

@@ -64,6 +64,8 @@ public class BookMenu {
 				System.out.print("Classification_Id : ");
 				params.put("Classification_Id", sc.nextInt());
 				System.out.print("Book_Auther : ");
+				params.put("Book_Name", sc.next());
+				System.out.print("Book_Name : ");
 				params.put("Book_Auther", sc.next());
 				System.out.print("Publisher : ");
 				params.put("Publisher", sc.next());
