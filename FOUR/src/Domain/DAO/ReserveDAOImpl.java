@@ -135,9 +135,7 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 	@Override
 	public List<ReserveDTO> selectAllReserves() {
 		List<ReserveDTO> reserveList = new ArrayList();
-		connectionItem = null;
-		pstmt = null;
-		rs = null;
+
 		try {
 			connectionItem = connectionPool.getConnection();
 			conn = connectionItem.getConn();
@@ -153,6 +151,7 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 				reserveDTO.setReserve_order(rs.getString("reserve_order"));
 				reserveList.add(reserveDTO);
 			}
+			return reserveList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("ReserveDAO's SELECT ALL RESERVES SQL EXCEPTION");
@@ -167,7 +166,7 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 			} catch (Exception e2) {
 			}
 		}
-		return reserveList;
+		return null;
 	}
 
 	// 예약 수정(U)

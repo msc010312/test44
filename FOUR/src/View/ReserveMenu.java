@@ -74,7 +74,12 @@ public class ReserveMenu {
 			}
 
 			// 예약 삭제
-			case 4: {
+			case 4: {	
+				System.out.print("User_Id : ");
+				params.put("user_id", sc.nextInt());
+				System.out.print("Rental_Id : ");
+				params.put("rental_id", sc.nextInt());
+				response =controller.execute(params);
 				break;
 			}
 			// 종료
@@ -82,9 +87,9 @@ public class ReserveMenu {
 				prev = !prev;
 				break;
 			}
-//			for (String key : response.keySet()) {
-//				System.out.println(key + " : " + response.get(key));
-//			}
+			for (String key : response.keySet()) {
+				System.out.println(key + " : " + response.get(key));
+			}
 		}
 	}
 }

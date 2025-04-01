@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +51,11 @@ public class ReserveController implements SubController {
 				reserveDTO = new ReserveDTO(rental_id, user_id, reserve_order);
 				Boolean result = reserveService.reserveAdd(reserveDTO);
 				if (result) {
-					response.put("message", "삽입 성공");
+					response.put("message", "예약이 완료되었습니다.");
+					response.put("status", true);
 				} else {
-					response.put("message", "삽입 실패");
+					response.put("message", "예약에 실패했습니다.");
+					response.put("status", false);
 				}
 				return response;
 			}
@@ -60,13 +63,24 @@ public class ReserveController implements SubController {
 			// 대여 아이디로 예약 조회
 			case 2: {
 				System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
+				List<ReserveDTO> list = new ArrayList();
 				if (user_id != 0) {
-					List<ReserveDTO> list = reserveService.ReserveSearchByuserId(user_id);
+					System.out.println("[RC] 유저 아이디로 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchByuserId(user_id);
 					response.put("data", list);
-					return response;
+					response.put("status", true);
+				} else if (rental_id != 0) {
+					System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchByRentalId(rental_id);
+					response.put("data", list);
+					response.put("status", true);
+				} else {
+					System.out.println("[RC] 전체 예약 조회 요청 확인");
+					list = reserveService.ReserveSearchAll();
+					response.put("status", true);
+					response.put("data", list);
 				}
-
-				break;
+				return response;
 			}
 
 			// 수정
@@ -76,7 +90,15 @@ public class ReserveController implements SubController {
 
 			// 삭제
 			case 4: {
-				break;
+				Boolean result = reserveService.ReserveDelete(user_id, rental_id);
+				if (result) {
+					response.put("message", "삭제 완료");
+					response.put("status", true);
+				} else {
+					response.put("message", "삭제 실패");
+					response.put("status", false);
+				}
+				return response;
 			}
 			default:
 				System.err.println("[UC] 잘못된 요청 번호");
