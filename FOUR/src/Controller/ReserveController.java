@@ -39,8 +39,8 @@ public class ReserveController implements SubController {
 
 			// 파라미터 받기
 			// params 에서 rental_id, user_id, reserve_order 추출
-			Integer rental_id = params.get("serviceNo") != null ? (Integer) params.get("serviceNo") : null;
-			Integer user_id = params.get("user_id") != null ? (Integer) params.get("user_id") : null;
+			int rental_id = params.get("rental_id") != null ? (int) params.get("rental_id") : 0;
+			int user_id = params.get("user_id") != null ? (int) params.get("user_id") : 0;
 			String reserve_order = params.get("reserve_order") != null ? (String) params.get("reserve_order") : null;
 
 			switch (serviceNo) {
@@ -48,20 +48,19 @@ public class ReserveController implements SubController {
 			case 1: {
 				System.out.println("[RC] 예약 요청 확인");
 				reserveDTO = new ReserveDTO(rental_id, user_id, reserve_order);
-				// 유효성 검사
-				boolean isOk = isValid(reserveDTO);
-				System.out.println("[No-1 예약 등록] 유효성 검증 확인 : " + isOk);
-				if (!isOk) {
-					response.put("status", false);
-					return response;
+				Boolean result = reserveService.reserveAdd(reserveDTO);
+				if (result) {
+					response.put("message", "삽입 성공");
+				} else {
+					response.put("message", "삽입 실패");
 				}
-				break;
+				return response;
 			}
 
 			// 대여 아이디로 예약 조회
 			case 2: {
 				System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
-				if (user_id != null) {
+				if (user_id != 0) {
 					List<ReserveDTO> list = reserveService.ReserveSearchByuserId(user_id);
 					response.put("data", list);
 					return response;
@@ -69,14 +68,14 @@ public class ReserveController implements SubController {
 
 				break;
 			}
-			
+
 			// 수정
-			case 3:{
+			case 3: {
 				break;
 			}
-			
+
 			// 삭제
-			case 4 :{
+			case 4: {
 				break;
 			}
 			default:
@@ -89,11 +88,6 @@ public class ReserveController implements SubController {
 		}
 
 		return null;
-	}
-
-	// 유효성 체크 함수
-	private boolean isValid(ReserveDTO reserveDTO) {
-		return true;
 	}
 
 	// 예외처리함수

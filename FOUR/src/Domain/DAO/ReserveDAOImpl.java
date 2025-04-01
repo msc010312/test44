@@ -25,14 +25,15 @@ public class ReserveDAOImpl extends DAO implements ReserveDAO {
 	// CRUD
 	// 예약 추가
 	@Override
-	public int insertReserve(ReserveDTO reserveDTO) throws Exception {
-		int result = 0;
+	public int insertReserve(ReserveDTO reserveDTO) throws Exception {		
 		try {
 			connectionItem = connectionPool.getConnection();
 			conn = connectionItem.getConn();
-
+			System.out.println(reserveDTO.getRental_id());
+			System.out.println(reserveDTO.getUser_id());
+			System.out.println(reserveDTO.getReserve_order());
 			pstmt = conn
-					.prepareStatement("INSERT INTO reserve_tbl (rental_id, user_id, reserve_order) VALUES (?, ?, ?)");
+					.prepareStatement("INSERT INTO reserve_tbl(rental_id, user_id, reserve_order) VALUES(?, ?, ?)");
 			pstmt.setInt(1, reserveDTO.getRental_id());
 			pstmt.setInt(2, reserveDTO.getUser_id());
 			pstmt.setString(3, reserveDTO.getReserve_order());

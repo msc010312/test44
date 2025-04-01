@@ -37,7 +37,7 @@ public class ReserveMenu {
 				System.out.print("User_Id : ");
 				params.put("user_id", sc.nextInt());
 				System.out.print("Reserve_Order : ");
-				params.put("reserve_order", sc.nextInt());
+				params.put("reserve_order", sc.next());
 				response = controller.execute(params);
 				break;
 			}
@@ -82,9 +82,9 @@ public class ReserveMenu {
 				prev = !prev;
 				break;
 			}
-			for (String key : response.keySet()) {
-				System.out.println(key + " : " + response.get(key));
-			}
+//			for (String key : response.keySet()) {
+//				System.out.println(key + " : " + response.get(key));
+//			}
 		}
 	}
 }
