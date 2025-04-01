@@ -87,6 +87,12 @@ public class BookController implements SubController {
 				break;
 			case 3: // 책 수정
 				System.out.println("[BC] 책 수정 요청");
+				BookDTO bookDTO4 = new BookDTO(bookCode, classificationId, bookAuther, bookName, publisher, isreserve);
+				isSuccess = bookService.bookEdit(bookDTO4);
+				if (isSuccess) {
+					response.put("status", isSuccess);
+					response.put("message", "책 수정 성공");
+				}
 				break;
 			case 4: // 책 삭제
 				System.out.println("[UC] 도서 수정 요청 확인");
