@@ -1,5 +1,6 @@
 package Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Domain.DAO.ReserveDAO;
@@ -30,7 +31,7 @@ public class ReserveService {
 		boolean isReserved = false;
 		try {
 			isReserved = reserveDAO.insertReserve(reserveDTO) > 0;
-			System.out.println("[RS] 예약 등록 성공");
+			System.out.println("[RS] 예약 등록");
 		} catch (Exception e) {
 		}
 		return isReserved;
@@ -41,7 +42,7 @@ public class ReserveService {
 		List<ReserveDTO> searchReserveByUser = null;
 		try {
 			searchReserveByUser = reserveDAO.selectReserveByUserId(user_id);
-			System.out.println("[RS] 유저별 예약조회 성공");
+			System.out.println("[RS] 유저별 예약조회");
 		} catch (Exception e) {
 		}
 		return searchReserveByUser;
@@ -52,7 +53,7 @@ public class ReserveService {
 		List<ReserveDTO> SearchReservebyRentalId = null;
 		try {
 			SearchReservebyRentalId = reserveDAO.selectReserveByRentalId(rental_id);
-			System.out.println("[RS] 렌탈 ID별 예약 조회 성공");
+			System.out.println("[RS] 렌탈 ID별 예약 조회");
 		} catch (Exception e) {
 		}
 		return SearchReservebyRentalId;
@@ -60,13 +61,14 @@ public class ReserveService {
 
 	// 전체 예약 조회
 	public List<ReserveDTO> ReserveSearchAll() {
-		List<ReserveDTO> SearchReserveAll = null;
+		List<ReserveDTO> SearchReserveAll = new ArrayList();
 		try {
 			SearchReserveAll = reserveDAO.selectAllReserves();
-			System.out.println("[RS] 전체 예약 조회 성공");
+			System.out.println("[RS] 전체 예약 조회");
+			return SearchReserveAll;
 		} catch (Exception e) {
 		}
-		return SearchReserveAll;
+		return null;
 	}
 
 	// 예약 수정
@@ -74,7 +76,7 @@ public class ReserveService {
 		boolean EditReserve = false;
 		try {
 			EditReserve = reserveDAO.updateReserve(reserveDTO) > 0;
-			System.out.println("[RS] 예약 수정 성공");
+			System.out.println("[RS] 예약 수정");
 		} catch (Exception e) {
 		}
 
@@ -86,7 +88,7 @@ public class ReserveService {
 		boolean DeleteReserve = false;
 		try {
 			DeleteReserve = reserveDAO.deleteReserve(user_id, rental_id) > 0;
-			System.out.println("[RS] 예약 삭제 성공");
+			System.out.println("[RS] 예약 삭제");
 		} catch (Exception e) {
 		}
 
