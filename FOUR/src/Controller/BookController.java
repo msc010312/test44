@@ -8,7 +8,6 @@ import Domain.DTO.BookDTO;
 import Domain.DTO.UserDTO;
 import Service.BookServiceImpl;
 
-
 public class BookController implements SubController {
 
 	private BookServiceImpl bookService;
@@ -36,14 +35,14 @@ public class BookController implements SubController {
 			return response;
 		}
 		try {
-			//파라미터
-			int bookCode = params.get("Book_Code") != null ? (int) params.get("Book_Code") : null;
-			int classificationId = params.get("Classification_Id") != null ? (int) params.get("Classification_Id") : null;
+			// 파라미터
+			int bookCode = params.get("Book_Code") != null ? (int) params.get("Book_Code") : 0;
+			int classificationId = params.get("Classification_Id") != null ? (int) params.get("Classification_Id") : 0;
 			String bookAuther = params.get("Book_Auther") != null ? (String) params.get("Book_Auther") : null;
 			String bookName = params.get("Book_Name") != null ? (String) params.get("Book_Name") : null;
 			String publisher = params.get("Publisher") != null ? (String) params.get("Publisher") : null;
-			int isreserve = params.get("Isreserve") != null ? (int) params.get("Isreserve") : null;
-			
+			int isreserve = params.get("Isreserve") != null ? (int) params.get("Isreserve") : 0;
+
 			switch (serviceNo) {
 			case 1: // 책 등록
 				System.out.println("[BC] 책 등록 요청");
@@ -54,42 +53,45 @@ public class BookController implements SubController {
 					response.put("status", false);
 					return response;
 				}
-				
+
 				Boolean isSuccess = bookService.bookRegistration(bookDTO);
-				if(isSuccess) {
+				if (isSuccess) {
 					response.put("status", isSuccess);
 					response.put("message", "책 등록 성공");
 				}
 				break;
 			case 2: // 책 조회
-				 BookDTO bookDTO1 = new BookDTO(-1, -1, null, bookName, null, -1);
-				 
-				 BookDTO book1DTO = null;
-			     List<BookDTO> book5 = null;
-		        if (bookDTO1.getBook_Name() == null) {
-		            System.out.println("[BC] 도서 정보 전체 조회 요청");
-		            book5 = bookService.bookSearchAll();
-		        } else {
-		            System.out.println("[BC] 특정 도서 조회 요청");
-		            bookDTO1.setBook_Name((String) params.get("Book_Name"));
-		        }
+				BookDTO bookDTO1 = new BookDTO(-1, -1, null, bookName, null, -1);
+				BookDTO bookDTO3 = null;
+				BookDTO book1DTO = null;
+				List<BookDTO> book5 = null;
+				if (bookDTO1.getBook_Name() == null) {
+					System.out.println("[BC] 도서 정보 전체 조회 요청");
+					book5 = bookService.bookSearchAll();
 
-		        if (book1DTO != null || book5 != null) {
-		            response.put("status", true);
-		            response.put("message", "도서 조회 성공");
-		            if(book1DTO != null)
-		            	response.put("data", book1DTO);
-		        } else 
-		            response.put("status", book5);
-		        
-			break;
+				} else {
+					System.out.println("[BC] 특정 도서 조회 요청");
+
+					bookDTO3 = bookService.bookSearch(bookDTO1);
+				}
+
+				if (bookDTO3 != null || book5 != null) {
+					response.put("status", true);
+					response.put("message", "도서 조회 성공");
+					if (bookDTO3 != null)
+						response.put("data", bookDTO3);
+					else
+						response.put("data", book5);
+				}
+
+				break;
 			case 3: // 책 수정
 				System.out.println("[BC] 책 수정 요청");
 				break;
 			case 4: // 책 삭제
 				System.out.println("[UC] 도서 수정 요청 확인");
 				bookDTO = new BookDTO(bookCode, -1, null, null, null, -1);
-				
+
 				boolean isSuccess1 = bookService.bookDelete(bookDTO);
 
 				if (isSuccess1) {
