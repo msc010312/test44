@@ -61,8 +61,7 @@ public class ReserveController implements SubController {
 			}
 
 			// 대여 아이디로 예약 조회
-			case 2: {
-				System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
+			case 2: {				
 				List<ReserveDTO> list = new ArrayList();
 				if (user_id != 0) {
 					System.out.println("[RC] 유저 아이디로 예약 조회 요청 확인");
@@ -71,7 +70,7 @@ public class ReserveController implements SubController {
 					response.put("status", true);
 				} else if (rental_id != 0) {
 					System.out.println("[RC] 대여 아이디로 예약 조회 요청 확인");
-					list = reserveService.ReserveSearchByRentalId(rental_id);
+					list = reserveService.ReserveSearchByRentalId(rental_id);			
 					response.put("data", list);
 					response.put("status", true);
 				} else {
